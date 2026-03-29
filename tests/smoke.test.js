@@ -1,0 +1,157 @@
+import { describe, it, expect } from 'vitest';
+
+import base from '../configs/base.js';
+import typescript, { typescriptConfig } from '../configs/typescript.js';
+import vanilla, { vanillaConfig } from '../configs/vanilla.js';
+import react, { reactConfig } from '../configs/react.js';
+import solid, { solidConfig } from '../configs/solid.js';
+import { reactLayer } from '../configs/react-layer.js';
+import { solidLayer } from '../configs/solid-layer.js';
+
+const CONFIGS = [
+  ['base', base],
+  ['typescript', typescript],
+  ['vanilla', vanilla],
+  ['react', react],
+  ['solid', solid],
+  ['reactLayer()', reactLayer()],
+  ['solidLayer()', solidLayer()],
+];
+
+describe('Smoke: all configs load and have valid shape', () => {
+  it.each(CONFIGS)('%s is a non-empty array', (_name, config) => {
+    expect(Array.isArray(config)).toBe(true);
+    expect(config.length).toBeGreaterThan(0);
+  });
+
+  it.each(CONFIGS)('%s contains only plain objects', (_name, config) => {
+    for (const entry of config) {
+      expect(typeof entry).toBe('object');
+      expect(entry).not.toBeNull();
+      expect(Array.isArray(entry)).toBe(false);
+    }
+  });
+});
+
+describe('Smoke: factory functions accept options', () => {
+  it('typescriptConfig() returns array', () => {
+    expect(Array.isArray(typescriptConfig())).toBe(true);
+  });
+
+  it('typescriptConfig({ files }) passes files to first config', () => {
+    const result = typescriptConfig({ files: ['**/*.ts'] });
+    expect(result[0].files).toContain('**/*.ts');
+  });
+
+  it('vanillaConfig() returns array', () => {
+    expect(Array.isArray(vanillaConfig())).toBe(true);
+  });
+
+  it('vanillaConfig() returns same length as vanilla default', () => {
+    expect(vanillaConfig().length).toBe(vanilla.length);
+  });
+
+  it('vanillaConfig({ tsFiles }) passes files to typescript layer', () => {
+    const result = vanillaConfig({ tsFiles: ['**/*.ts'] });
+    const tsEntry = result.find((c) => Array.isArray(c.files) && c.files.includes('**/*.ts'));
+    expect(tsEntry).toBeDefined();
+  });
+
+  it('vanillaConfig({ tsconfigPath }) passes tsconfigPath to typescript layer', () => {
+    const result = vanillaConfig({ tsconfigPath: './custom/tsconfig.json' });
+    const tsEntry = result.find(
+      (c) => c.languageOptions?.parserOptions?.project === './custom/tsconfig.json',
+    );
+    expect(tsEntry).toBeDefined();
+  });
+
+  it('reactConfig({ tsconfigPath }) passes tsconfigPath to both vanilla and react layers', () => {
+    const result = reactConfig({ tsconfigPath: './tsconfig.app.json' });
+    const entries = result.filter(
+      (c) => c.languageOptions?.parserOptions?.project === './tsconfig.app.json',
+    );
+    expect(entries.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('solidConfig({ tsconfigPath }) passes tsconfigPath to both vanilla and solid layers', () => {
+    const result = solidConfig({ tsconfigPath: './tsconfig.app.json' });
+    const entries = result.filter(
+      (c) => c.languageOptions?.parserOptions?.project === './tsconfig.app.json',
+    );
+    expect(entries.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('reactConfig() returns array longer than vanilla', () => {
+    const result = reactConfig();
+    expect(result.length).toBeGreaterThan(vanilla.length);
+  });
+
+  it('solidConfig() returns array longer than vanilla', () => {
+    const result = solidConfig();
+    expect(result.length).toBeGreaterThan(vanilla.length);
+  });
+
+  it('reactLayer({ files }) passes files to config', () => {
+    const result = reactLayer({ files: ['**/*.tsx'] });
+    expect(result[0].files).toContain('**/*.tsx');
+  });
+
+  it('solidLayer({ files }) passes files to config', () => {
+    const result = solidLayer({ files: ['**/*.tsx'] });
+    expect(result[0].files).toContain('**/*.tsx');
+  });
+});
+
+describe('Smoke: configs contain expected plugins', () => {
+  it('typescript config registers @typescript-eslint plugin', () => {
+    const tsEntry = typescript.find((c) => c.plugins?.['@typescript-eslint']);
+    expect(tsEntry).toBeDefined();
+  });
+
+  it('typescript config registers @stylistic plugin', () => {
+    const entry = typescript.find((c) => c.plugins?.['@stylistic']);
+    expect(entry).toBeDefined();
+  });
+
+  it('typescript config registers unicorn plugin', () => {
+    const entry = typescript.find((c) => c.plugins?.unicorn);
+    expect(entry).toBeDefined();
+  });
+
+  it('react config registers react plugin', () => {
+    const entry = react.find((c) => c.plugins?.react);
+    expect(entry).toBeDefined();
+  });
+
+  it('react config registers react-hooks plugin', () => {
+    const entry = react.find((c) => c.plugins?.['react-hooks']);
+    expect(entry).toBeDefined();
+  });
+
+  it('solid config registers solid plugin', () => {
+    const entry = solid.find((c) => c.plugins?.solid);
+    expect(entry).toBeDefined();
+  });
+});
+
+describe('Smoke: layers are self-contained and minimal', () => {
+  // reactLayer and solidLayer must return exactly 1 config entry each.
+  // If they were accidentally pulling in typescriptConfig() internally,
+  // they would return more than 1 entry (typescriptConfig returns 2 entries).
+  it('reactLayer() returns exactly 1 config entry', () => {
+    expect(reactLayer().length).toBe(1);
+  });
+
+  it('solidLayer() returns exactly 1 config entry', () => {
+    expect(solidLayer().length).toBe(1);
+  });
+
+  it('solidConfig has more entries than solidLayer alone', () => {
+    // vanilla (base + ts) is prepended, so total must exceed solidLayer length
+    expect(solid.length).toBeGreaterThan(solidLayer().length);
+  });
+
+  it('reactConfig has more entries than reactLayer alone', () => {
+    expect(react.length).toBeGreaterThan(reactLayer().length);
+  });
+});

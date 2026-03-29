@@ -1,0 +1,128 @@
+name: "🚀 publish"
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish-npm:
+    name: Publish to npmjs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org/
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # npm publish to npmjs
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-gh:
+    name: Publish to GitHub Packages
+    runs-on: ubuntu-latest
+    needs: publish-npm
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://npm.pkg.github.com/
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # npm publish to GitHub Packages
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.AUTH_TOKEN_GITHUB }}
+
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: publish-gh
+    permissions:
+      contents: write
+    env:
+      HUSKY: 0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Build npm tarball exactly like it will be installed from npm
+      - name: Pack
+        run: npm pack
+
+      # Extract release notes from CHANGELOG.md for the current tag
+      - name: Generate release notes from CHANGELOG
+        run: |
+          node << 'EOF'
+          const fs = require('fs');
+
+          const tag = process.env.GITHUB_REF_NAME;
+          const version = tag.replace(/^v/, '');
+
+          const changelog = fs.readFileSync('CHANGELOG.md', 'utf8');
+
+          const regex = new RegExp(
+            `^#{2,3}\\s+v?${version}[^\\n]*\\n([\\s\\S]*?)(?=^#{2,3}\\s+v?|\\Z)`,
+            'm'
+          );
+
+          const match = changelog.match(regex);
+
+          if (!match) {
+            console.error(`Could not find section for version ${version} in CHANGELOG.md`);
+            process.exit(1);
+          }
+
+          fs.writeFileSync('release-notes.md', match[0]);
+          EOF
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: release-notes.md
+          files: "*.tgz"

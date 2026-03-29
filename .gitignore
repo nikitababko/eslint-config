@@ -1,0 +1,31 @@
+# dependencies
+node_modules/
+
+# build / outputs
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# package manager logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+*.log
+
+# env files
+.env
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# caches
+.cache/
+.eslintcache
