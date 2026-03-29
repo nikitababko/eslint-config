@@ -2,14 +2,33 @@
   "name": "@nikitababko/eslint-config",
   "version": "0.1.0",
   "type": "module",
+  "types": "./configs/vanilla.d.ts",
   "exports": {
     "./package.json": "./package.json",
-    ".": "./configs/vanilla.js",
-    "./base": "./configs/base.js",
-    "./typescript": "./configs/typescript.js",
-    "./vanilla": "./configs/vanilla.js",
-    "./react": "./configs/react.js",
-    "./solid": "./configs/solid.js"
+    ".": {
+      "types": "./configs/vanilla.d.ts",
+      "default": "./configs/vanilla.js"
+    },
+    "./base": {
+      "types": "./configs/base.d.ts",
+      "default": "./configs/base.js"
+    },
+    "./typescript": {
+      "types": "./configs/typescript.d.ts",
+      "default": "./configs/typescript.js"
+    },
+    "./vanilla": {
+      "types": "./configs/vanilla.d.ts",
+      "default": "./configs/vanilla.js"
+    },
+    "./react": {
+      "types": "./configs/react.d.ts",
+      "default": "./configs/react.js"
+    },
+    "./solid": {
+      "types": "./configs/solid.d.ts",
+      "default": "./configs/solid.js"
+    }
   },
   "files": [
     "configs",

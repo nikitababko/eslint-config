@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { ESLint } from 'eslint';
 
 import tsParser from '@typescript-eslint/parser';
@@ -55,7 +55,10 @@ describe('react/jsx-no-useless-fragment', () => {
 
   it('errors on fragment wrapping a single element', async () => {
     expect(
-      hasRule(await lintJSX('const App = () => <><div /></>;', rule), 'react/jsx-no-useless-fragment'),
+      hasRule(
+        await lintJSX('const App = () => <><div /></>;', rule),
+        'react/jsx-no-useless-fragment',
+      ),
     ).toBe(true);
   });
 
@@ -133,7 +136,10 @@ describe('react/jsx-boolean-value', () => {
 
   it('allows implicit true in JSX attribute', async () => {
     expect(
-      hasRule(await lintJSX('const App = () => <input disabled />;', rule), 'react/jsx-boolean-value'),
+      hasRule(
+        await lintJSX('const App = () => <input disabled />;', rule),
+        'react/jsx-boolean-value',
+      ),
     ).toBe(false);
   });
 });

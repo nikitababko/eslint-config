@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { ESLint } from 'eslint';
 import path from 'path';
 import { fileURLToPath } from 'url';

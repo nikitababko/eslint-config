@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { Linter } from 'eslint';
 
 import stylistic from '@stylistic/eslint-plugin';
@@ -64,15 +64,15 @@ describe('no-multiple-empty-lines', () => {
   const rule = { 'no-multiple-empty-lines': commonTsRules['no-multiple-empty-lines'] };
 
   it('errors on two consecutive empty lines', () => {
-    expect(
-      hasRule(lint('const x = 1;\n\n\nconst y = 2;', rule), 'no-multiple-empty-lines'),
-    ).toBe(true);
+    expect(hasRule(lint('const x = 1;\n\n\nconst y = 2;', rule), 'no-multiple-empty-lines')).toBe(
+      true,
+    );
   });
 
   it('allows a single empty line', () => {
-    expect(
-      hasRule(lint('const x = 1;\n\nconst y = 2;', rule), 'no-multiple-empty-lines'),
-    ).toBe(false);
+    expect(hasRule(lint('const x = 1;\n\nconst y = 2;', rule), 'no-multiple-empty-lines')).toBe(
+      false,
+    );
   });
 });
 
@@ -135,15 +135,15 @@ describe('@stylistic/arrow-parens', () => {
   const plugins = { '@stylistic': stylistic };
 
   it('errors on arrow function without parens', () => {
-    expect(
-      hasRule(lint('const fn = x => x;', rule, plugins), '@stylistic/arrow-parens'),
-    ).toBe(true);
+    expect(hasRule(lint('const fn = x => x;', rule, plugins), '@stylistic/arrow-parens')).toBe(
+      true,
+    );
   });
 
   it('allows arrow function with parens', () => {
-    expect(
-      hasRule(lint('const fn = (x) => x;', rule, plugins), '@stylistic/arrow-parens'),
-    ).toBe(false);
+    expect(hasRule(lint('const fn = (x) => x;', rule, plugins), '@stylistic/arrow-parens')).toBe(
+      false,
+    );
   });
 });
 
@@ -190,7 +190,7 @@ describe('@stylistic/max-len', () => {
   const plugins = { '@stylistic': stylistic };
 
   it(`errors on line exceeding ${MAX_STRING_LENGTH} characters`, () => {
-    // 105 chars — not a string/comment/template literal so not ignored
+    // Intentionally exceeds MAX_STRING_LENGTH and is not ignored by config
     const code =
       'const aVeryLongVariableNameThatDefinitelyExceedsOneHundredCharactersLimitForThisProjectConfiguration = 1;';
     expect(hasRule(lint(code, rule, plugins), '@stylistic/max-len')).toBe(true);
@@ -313,15 +313,15 @@ describe('unicorn/prevent-abbreviations', () => {
   });
 
   it('allows ignored abbreviation: Props', () => {
-    expect(
-      hasRule(lint('const Props = {};', rule, plugins), 'unicorn/prevent-abbreviations'),
-    ).toBe(false);
+    expect(hasRule(lint('const Props = {};', rule, plugins), 'unicorn/prevent-abbreviations')).toBe(
+      false,
+    );
   });
 
   it('allows ignored abbreviation: props', () => {
-    expect(
-      hasRule(lint('const props = {};', rule, plugins), 'unicorn/prevent-abbreviations'),
-    ).toBe(false);
+    expect(hasRule(lint('const props = {};', rule, plugins), 'unicorn/prevent-abbreviations')).toBe(
+      false,
+    );
   });
 });
 
@@ -333,15 +333,15 @@ describe('@typescript-eslint/no-unused-vars', () => {
   };
 
   it('errors on declared but unused variable', () => {
-    expect(
-      hasRule(lintTS('const unused = 1;', rule), '@typescript-eslint/no-unused-vars'),
-    ).toBe(true);
+    expect(hasRule(lintTS('const unused = 1;', rule), '@typescript-eslint/no-unused-vars')).toBe(
+      true,
+    );
   });
 
   it('allows variable starting with underscore', () => {
-    expect(
-      hasRule(lintTS('const _ignored = 1;', rule), '@typescript-eslint/no-unused-vars'),
-    ).toBe(false);
+    expect(hasRule(lintTS('const _ignored = 1;', rule), '@typescript-eslint/no-unused-vars')).toBe(
+      false,
+    );
   });
 
   it('allows used variable', () => {
@@ -411,15 +411,11 @@ describe('@typescript-eslint/consistent-type-imports', () => {
 
   it('errors when type-only import is not using import type', () => {
     const code = "import { MyInterface } from './module';\nconst x: MyInterface = {};";
-    expect(
-      hasRule(lintTS(code, rule), '@typescript-eslint/consistent-type-imports'),
-    ).toBe(true);
+    expect(hasRule(lintTS(code, rule), '@typescript-eslint/consistent-type-imports')).toBe(true);
   });
 
   it('allows import type syntax', () => {
     const code = "import type { MyInterface } from './module';\nconst x: MyInterface = {};";
-    expect(
-      hasRule(lintTS(code, rule), '@typescript-eslint/consistent-type-imports'),
-    ).toBe(false);
+    expect(hasRule(lintTS(code, rule), '@typescript-eslint/consistent-type-imports')).toBe(false);
   });
 });

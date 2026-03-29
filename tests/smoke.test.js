@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import base from '../configs/base.js';
 import typescript, { typescriptConfig } from '../configs/typescript.js';

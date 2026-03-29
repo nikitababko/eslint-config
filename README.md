@@ -55,7 +55,7 @@ Built on top of:
 ## Requirements
 
 | Dependency | Version |
-|------------|---------|
+| ---------- | ------- |
 | Node.js    | ≥ 18    |
 | ESLint     | ≥ 9     |
 
@@ -253,41 +253,41 @@ All factory functions accept an options object. All options are optional.
 
 ### `baseConfig(options)`
 
-| Option          | Type                        | Default                       | Description                        |
-|-----------------|-----------------------------|-------------------------------|------------------------------------|
-| `ignores`       | `string[]`                  | `['node_modules', 'dist', …]` | Glob patterns to ignore globally   |
-| `globalsPreset` | `Record<string, boolean>`   | `globals.browser + globals.node` | Global variables for the project |
+| Option          | Type                      | Default                          | Description                      |
+| --------------- | ------------------------- | -------------------------------- | -------------------------------- |
+| `ignores`       | `string[]`                | `['node_modules', 'dist', …]`    | Glob patterns to ignore globally |
+| `globalsPreset` | `Record<string, boolean>` | `globals.browser + globals.node` | Global variables for the project |
 
 ### `typescriptConfig(options)`
 
-| Option             | Type       | Default           | Description                                 |
-|--------------------|------------|-------------------|---------------------------------------------|
-| `files`            | `string[]` | `['**/*.ts', '**/*.tsx']` | File patterns to apply TS rules to  |
-| `tsconfigPath`     | `string`   | `'./tsconfig.json'` | Path to `tsconfig.json`                   |
-| `tsconfigRootDir`  | `string`   | `process.cwd()`   | Root dir for tsconfig resolution            |
+| Option            | Type       | Default                   | Description                        |
+| ----------------- | ---------- | ------------------------- | ---------------------------------- |
+| `files`           | `string[]` | `['**/*.ts', '**/*.tsx']` | File patterns to apply TS rules to |
+| `tsconfigPath`    | `string`   | `'./tsconfig.json'`       | Path to `tsconfig.json`            |
+| `tsconfigRootDir` | `string`   | `process.cwd()`           | Root dir for tsconfig resolution   |
 
 ### `vanillaConfig(options)`
 
 Accepts all `baseConfig` options and all `typescriptConfig` options, with `files` renamed to `tsFiles`.
 
-| Option             | Type       | Default           | Description                                       |
-|--------------------|------------|-------------------|---------------------------------------------------|
-| `ignores`          | `string[]` | See `baseConfig`  | Passed to `baseConfig`                            |
-| `globalsPreset`    | `object`   | See `baseConfig`  | Passed to `baseConfig`                            |
-| `tsFiles`          | `string[]` | `['**/*.ts', '**/*.tsx']` | Passed as `files` to `typescriptConfig` |
-| `tsconfigPath`     | `string`   | `'./tsconfig.json'` | Passed to `typescriptConfig`                    |
-| `tsconfigRootDir`  | `string`   | `process.cwd()`   | Passed to `typescriptConfig`                      |
+| Option            | Type       | Default                   | Description                             |
+| ----------------- | ---------- | ------------------------- | --------------------------------------- |
+| `ignores`         | `string[]` | See `baseConfig`          | Passed to `baseConfig`                  |
+| `globalsPreset`   | `object`   | See `baseConfig`          | Passed to `baseConfig`                  |
+| `tsFiles`         | `string[]` | `['**/*.ts', '**/*.tsx']` | Passed as `files` to `typescriptConfig` |
+| `tsconfigPath`    | `string`   | `'./tsconfig.json'`       | Passed to `typescriptConfig`            |
+| `tsconfigRootDir` | `string`   | `process.cwd()`           | Passed to `typescriptConfig`            |
 
 ### `reactConfig(options)` / `solidConfig(options)`
 
 Accepts all `vanillaConfig` options plus:
 
-| Option             | Type               | Default                         | Description                         |
-|--------------------|--------------------|---------------------------------|-------------------------------------|
-| `files`            | `string[]`         | `['**/*.tsx', '**/*.jsx']`      | File patterns for the React/Solid layer |
-| `tsconfigPath`     | `string`           | `'./tsconfig.json'`             | Passed to both vanilla and the layer |
-| `tsconfigRootDir`  | `string`           | `process.cwd()`                 | Passed to both vanilla and the layer |
-| `ecmaVersion`      | `number \| 'latest'` | `'latest'` *(React only)*     | ECMAScript version for the parser   |
+| Option            | Type                 | Default                    | Description                             |
+| ----------------- | -------------------- | -------------------------- | --------------------------------------- |
+| `files`           | `string[]`           | `['**/*.tsx', '**/*.jsx']` | File patterns for the React/Solid layer |
+| `tsconfigPath`    | `string`             | `'./tsconfig.json'`        | Passed to both vanilla and the layer    |
+| `tsconfigRootDir` | `string`             | `process.cwd()`            | Passed to both vanilla and the layer    |
+| `ecmaVersion`     | `number \| 'latest'` | `'latest'` _(React only)_  | ECMAScript version for the parser       |
 
 ---
 
@@ -295,15 +295,15 @@ Accepts all `vanillaConfig` options plus:
 
 ### TypeScript
 
-| Rule | Severity | Notes |
-|------|----------|-------|
-| `@typescript-eslint/consistent-type-imports` | error | Enforces `import type` for type-only imports |
-| `@typescript-eslint/consistent-type-definitions` | error | Prefers `interface` over `type` for object shapes |
-| `@typescript-eslint/no-unused-vars` | error | Variables prefixed with `_` are ignored |
-| `@typescript-eslint/no-explicit-any` | warn | Discourages `any` usage |
-| `@typescript-eslint/no-floating-promises` | warn | Unhandled promises must be handled |
-| `@typescript-eslint/no-misused-promises` | error | Prevents async functions in sync callback positions |
-| `@typescript-eslint/naming-convention` | error | Boolean variables must be prefixed (see below) |
+| Rule                                             | Severity | Notes                                               |
+| ------------------------------------------------ | -------- | --------------------------------------------------- |
+| `@typescript-eslint/consistent-type-imports`     | error    | Enforces `import type` for type-only imports        |
+| `@typescript-eslint/consistent-type-definitions` | error    | Prefers `interface` over `type` for object shapes   |
+| `@typescript-eslint/no-unused-vars`              | error    | Variables prefixed with `_` are ignored             |
+| `@typescript-eslint/no-explicit-any`             | warn     | Discourages `any` usage                             |
+| `@typescript-eslint/no-floating-promises`        | warn     | Unhandled promises must be handled                  |
+| `@typescript-eslint/no-misused-promises`         | error    | Prevents async functions in sync callback positions |
+| `@typescript-eslint/naming-convention`           | error    | Boolean variables must be prefixed (see below)      |
 
 **Boolean naming prefixes:** `is`, `has`, `can`, `should`, `will`, `did`, `was`, `were`, `allow`, `enable`, `supports`, `needs`, `requires`
 
@@ -319,22 +319,22 @@ const isOpen = false;
 
 ### Stylistic
 
-| Rule | Config |
-|------|--------|
-| `@stylistic/indent` | 2 spaces |
-| `@stylistic/quotes` | single quotes |
-| `@stylistic/semi` | always |
-| `@stylistic/max-len` | 90 chars (strings, comments, template literals ignored) |
-| `@stylistic/comma-dangle` | always-multiline |
-| `@stylistic/arrow-parens` | always — `(x) => x` |
-| `@stylistic/brace-style` | 1tbs |
-| `@stylistic/object-curly-spacing` | always — `{ a: 1 }` |
+| Rule                              | Config                                                   |
+| --------------------------------- | -------------------------------------------------------- |
+| `@stylistic/indent`               | 2 spaces                                                 |
+| `@stylistic/quotes`               | single quotes                                            |
+| `@stylistic/semi`                 | always                                                   |
+| `@stylistic/max-len`              | 100 chars (strings, comments, template literals ignored) |
+| `@stylistic/comma-dangle`         | always-multiline                                         |
+| `@stylistic/arrow-parens`         | always — `(x) => x`                                      |
+| `@stylistic/brace-style`          | 1tbs                                                     |
+| `@stylistic/object-curly-spacing` | always — `{ a: 1 }`                                      |
 
 ### Unicorn
 
-| Rule | Config |
-|------|--------|
-| `unicorn/filename-case` | kebab-case only |
+| Rule                            | Config                                               |
+| ------------------------------- | ---------------------------------------------------- |
+| `unicorn/filename-case`         | kebab-case only                                      |
 | `unicorn/prevent-abbreviations` | error (exceptions: `Props`, `props`, `Prev`, `prev`) |
 
 ### Imports
@@ -357,33 +357,33 @@ import type { MyType } from './types';
 
 ### React (`.tsx`/`.jsx` files)
 
-| Rule | Severity | Notes |
-|------|----------|-------|
-| `react/jsx-no-useless-fragment` | error | Fragments with a single child are forbidden |
-| `react/no-multi-comp` | error | One component per file |
-| `react/self-closing-comp` | error | `<div />` instead of `<div></div>` |
-| `react/no-array-index-key` | error | Array index must not be used as `key` |
-| `react/jsx-boolean-value` | error | Implicit `true` — `<input disabled />` |
-| `react/jsx-curly-brace-presence` | error | No unnecessary curly braces in JSX |
-| `react/jsx-key` | error | All list elements must have a `key` prop |
-| `react/react-in-jsx-scope` | off | Not needed in React 17+ |
-| `react-refresh/only-export-components` | warn | For Vite HMR compatibility |
-| `react-hooks/*` | recommended | Standard hooks rules |
+| Rule                                   | Severity    | Notes                                       |
+| -------------------------------------- | ----------- | ------------------------------------------- |
+| `react/jsx-no-useless-fragment`        | error       | Fragments with a single child are forbidden |
+| `react/no-multi-comp`                  | error       | One component per file                      |
+| `react/self-closing-comp`              | error       | `<div />` instead of `<div></div>`          |
+| `react/no-array-index-key`             | error       | Array index must not be used as `key`       |
+| `react/jsx-boolean-value`              | error       | Implicit `true` — `<input disabled />`      |
+| `react/jsx-curly-brace-presence`       | error       | No unnecessary curly braces in JSX          |
+| `react/jsx-key`                        | error       | All list elements must have a `key` prop    |
+| `react/react-in-jsx-scope`             | off         | Not needed in React 17+                     |
+| `react-refresh/only-export-components` | warn        | For Vite HMR compatibility                  |
+| `react-hooks/*`                        | recommended | Standard hooks rules                        |
 
 ### SolidJS (`.tsx`/`.jsx` files)
 
-| Rule | Severity | Notes |
-|------|----------|-------|
-| `solid/reactivity` | error | Reactive values must be accessed correctly |
-| `solid/no-destructure` | warn | Destructuring props breaks reactivity |
-| `solid/components-return-once` | error | Components must have a single return |
-| `solid/no-array-handlers` | error | Array handlers break fine-grained reactivity |
-| `solid/event-handlers` | error | Event handler naming conventions |
-| `solid/no-proxy-apis` | error | Proxy APIs not compatible with Solid's reactive model |
-| `solid/no-innerhtml` | warn | Prefer JSX over `innerHTML` |
-| `solid/jsx-no-duplicate-props` | error | Duplicate JSX props are forbidden |
-| `solid/no-unknown-namespaces` | error | Only known Solid JSX namespaces allowed |
-| `solid/prefer-show` | warn | Prefer `<Show>` over ternary for conditional rendering |
+| Rule                           | Severity | Notes                                                  |
+| ------------------------------ | -------- | ------------------------------------------------------ |
+| `solid/reactivity`             | error    | Reactive values must be accessed correctly             |
+| `solid/no-destructure`         | warn     | Destructuring props breaks reactivity                  |
+| `solid/components-return-once` | error    | Components must have a single return                   |
+| `solid/no-array-handlers`      | error    | Array handlers break fine-grained reactivity           |
+| `solid/event-handlers`         | error    | Event handler naming conventions                       |
+| `solid/no-proxy-apis`          | error    | Proxy APIs not compatible with Solid's reactive model  |
+| `solid/no-innerhtml`           | warn     | Prefer JSX over `innerHTML`                            |
+| `solid/jsx-no-duplicate-props` | error    | Duplicate JSX props are forbidden                      |
+| `solid/no-unknown-namespaces`  | error    | Only known Solid JSX namespaces allowed                |
+| `solid/prefer-show`            | warn     | Prefer `<Show>` over ternary for conditional rendering |
 
 ---
 
@@ -455,14 +455,14 @@ export default vanillaConfig({
 
 ## Available Exports
 
-| Import path | Default export | Named exports |
-|-------------|---------------|---------------|
-| `@nikitababko/eslint-config` | `vanillaConfig()` (array) | — |
-| `@nikitababko/eslint-config/base` | `baseConfig()` (array) | `baseConfig` |
+| Import path                             | Default export               | Named exports                                           |
+| --------------------------------------- | ---------------------------- | ------------------------------------------------------- |
+| `@nikitababko/eslint-config`            | `vanillaConfig()` (array)    | —                                                       |
+| `@nikitababko/eslint-config/base`       | `baseConfig()` (array)       | `baseConfig`                                            |
 | `@nikitababko/eslint-config/typescript` | `typescriptConfig()` (array) | `typescriptConfig`, `commonTsRules`, `DEFAULT_TS_FILES` |
-| `@nikitababko/eslint-config/vanilla` | `vanillaConfig()` (array) | `vanillaConfig` |
-| `@nikitababko/eslint-config/react` | `reactConfig()` (array) | `reactConfig`, `reactLayer`, `DEFAULT_REACT_FILES` |
-| `@nikitababko/eslint-config/solid` | `solidConfig()` (array) | `solidConfig`, `solidLayer`, `DEFAULT_SOLID_FILES` |
+| `@nikitababko/eslint-config/vanilla`    | `vanillaConfig()` (array)    | `vanillaConfig`                                         |
+| `@nikitababko/eslint-config/react`      | `reactConfig()` (array)      | `reactConfig`, `reactLayer`, `DEFAULT_REACT_FILES`      |
+| `@nikitababko/eslint-config/solid`      | `solidConfig()` (array)      | `solidConfig`, `solidLayer`, `DEFAULT_SOLID_FILES`      |
 
 ---
 
@@ -509,7 +509,7 @@ Or use a separate `tsconfig.eslint.json` that includes all files:
 import { typescriptConfig } from '@nikitababko/eslint-config/typescript';
 
 export default typescriptConfig({
-  files: ['src/**/*.ts'],  // only lint source, not tests/scripts
+  files: ['src/**/*.ts'], // only lint source, not tests/scripts
 });
 ```
 
