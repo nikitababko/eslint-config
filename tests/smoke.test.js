@@ -3,10 +3,24 @@ import { describe, expect, it } from 'vitest';
 import base from '../configs/base.js';
 import typescript, { typescriptConfig } from '../configs/typescript.js';
 import vanilla, { vanillaConfig } from '../configs/vanilla.js';
-import react, { reactConfig } from '../configs/react.js';
-import solid, { solidConfig } from '../configs/solid.js';
-import { reactLayer } from '../configs/react-layer.js';
-import { solidLayer } from '../configs/solid-layer.js';
+import react, {
+  DEFAULT_REACT_FILES,
+  reactConfig,
+  reactLayer as reactLayerFromPreset,
+} from '../configs/react.js';
+import solid, {
+  DEFAULT_SOLID_FILES,
+  solidConfig,
+  solidLayer as solidLayerFromPreset,
+} from '../configs/solid.js';
+import {
+  DEFAULT_REACT_FILES as DEFAULT_REACT_LAYER_FILES,
+  reactLayer,
+} from '../configs/react-layer.js';
+import {
+  DEFAULT_SOLID_FILES as DEFAULT_SOLID_LAYER_FILES,
+  solidLayer,
+} from '../configs/solid-layer.js';
 
 const CONFIGS = [
   ['base', base],
@@ -131,6 +145,24 @@ describe('Smoke: configs contain expected plugins', () => {
   it('solid config registers solid plugin', () => {
     const entry = solid.find((c) => c.plugins?.solid);
     expect(entry).toBeDefined();
+  });
+});
+
+describe('Smoke: preset entrypoints re-export layer helpers', () => {
+  it('react preset re-exports reactLayer', () => {
+    expect(reactLayerFromPreset).toBe(reactLayer);
+  });
+
+  it('react preset re-exports DEFAULT_REACT_FILES', () => {
+    expect(DEFAULT_REACT_FILES).toEqual(DEFAULT_REACT_LAYER_FILES);
+  });
+
+  it('solid preset re-exports solidLayer', () => {
+    expect(solidLayerFromPreset).toBe(solidLayer);
+  });
+
+  it('solid preset re-exports DEFAULT_SOLID_FILES', () => {
+    expect(DEFAULT_SOLID_FILES).toEqual(DEFAULT_SOLID_LAYER_FILES);
   });
 });
 

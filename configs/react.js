@@ -1,6 +1,8 @@
 import { vanillaConfig } from './vanilla.js';
 import { reactLayer } from './react-layer.js';
 
+export { reactLayer, DEFAULT_REACT_FILES } from './react-layer.js';
+
 /**
  * @typedef {import('./vanilla.js').VanillaConfigOptions & import('./react-layer.js').ReactLayerOptions} ReactConfigOptions
  */
