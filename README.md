@@ -63,32 +63,34 @@ Built on top of:
 
 ## Installation
 
-Install the package and its **required** peer dependencies:
+Install the package and the shared peer dependencies used by the default presets
+(`@nikitababko/eslint-config`, `vanilla`, `typescript`, `react`, `solid`):
 
 ```bash
 # npm
-npm install -D @nikitababko/eslint-config eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier globals
+npm install -D @nikitababko/eslint-config eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
 
 # pnpm
-pnpm add -D @nikitababko/eslint-config eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier globals
+pnpm add -D @nikitababko/eslint-config eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
 
 # yarn
-yarn add -D @nikitababko/eslint-config eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier globals
+yarn add -D @nikitababko/eslint-config eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
 ```
 
 For **React** projects, also install:
 
 ```bash
-pnpm add -D eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh eslint-plugin-import-x eslint-plugin-unicorn
+pnpm add -D eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh
 ```
 
 For **SolidJS** projects:
 
 ```bash
-pnpm add -D eslint-plugin-solid eslint-plugin-import-x eslint-plugin-unicorn
+pnpm add -D eslint-plugin-solid
 ```
 
-> All framework-specific packages are optional peer dependencies — install only what you need.
+> Only the framework-specific packages are optional peer dependencies — install
+> the React or Solid plugins only when you use those presets.
 
 ---
 

@@ -106,9 +106,6 @@
     },
     "eslint-plugin-solid": {
       "optional": true
-    },
-    "eslint-plugin-import-x": {
-      "optional": true
     }
   },
   "config": {
