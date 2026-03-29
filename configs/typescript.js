@@ -1,4 +1,4 @@
-import tsParser from '@typescript-eslint/parser';
+import * as tsParser from '@typescript-eslint/parser';
 import unicorn from 'eslint-plugin-unicorn';
 import stylistic from '@stylistic/eslint-plugin';
 import importX from 'eslint-plugin-import-x';
@@ -14,10 +14,7 @@ import {
 
 export const commonTsRules = {
   // Base
-  'no-console': [
-    RULE_STATUSES.WARN,
-    { allow: [CONSOLE_METHODS.WARN, CONSOLE_METHODS.ERROR] },
-  ],
+  'no-console': [RULE_STATUSES.WARN, { allow: [CONSOLE_METHODS.WARN, CONSOLE_METHODS.ERROR] }],
   'no-multiple-empty-lines': [RULE_STATUSES.ERROR, { max: 1, maxEOF: 0, maxBOF: 0 }],
   'no-unused-vars': RULE_STATUSES.OFF,
   'import-x/order': [
@@ -47,12 +44,6 @@ export const commonTsRules = {
     RULE_STATUSES.ERROR,
     {
       selector: 'variable',
-      types: ['boolean'],
-      format: ['camelCase', 'PascalCase'],
-      prefix: BOOLEAN_PREFIXES,
-    },
-    {
-      selector: 'property',
       types: ['boolean'],
       format: ['camelCase', 'PascalCase'],
       prefix: BOOLEAN_PREFIXES,
@@ -88,7 +79,18 @@ export const commonTsRules = {
   'unicorn/filename-case': [RULE_STATUSES.ERROR, { cases: { kebabCase: true } }],
   'unicorn/prevent-abbreviations': [
     RULE_STATUSES.ERROR,
-    { ignore: ['Props', 'props', 'Prev', 'prev'] },
+    {
+      allowList: {
+        Props: true,
+        props: true,
+        Prev: true,
+        prev: true,
+        ref: true,
+        refs: true,
+        ctx: true,
+      },
+      ignore: [/^tsconfigRootDirs?$/u],
+    },
   ],
   'unicorn/no-null': RULE_STATUSES.OFF,
   'unicorn/consistent-function-scoping': RULE_STATUSES.OFF,
@@ -107,7 +109,6 @@ export const DEFAULT_TS_FILES = ['**/*.ts', '**/*.tsx'];
  * TypeScript layer: TS parser + type-aware rules + stylistic + unicorn plugins.
  *
  * @param {TypescriptConfigOptions} [options]
- * @returns {import('eslint').Linter.Config[]}
  */
 export const typescriptConfig = (options = {}) => {
   const {

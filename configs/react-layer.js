@@ -2,7 +2,7 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
+import * as tsParser from '@typescript-eslint/parser';
 import unicorn from 'eslint-plugin-unicorn';
 import stylistic from '@stylistic/eslint-plugin';
 import importX from 'eslint-plugin-import-x';
@@ -22,7 +22,6 @@ export const DEFAULT_REACT_FILES = ['**/*.tsx', '**/*.jsx'];
 
 /**
  * @param {ReactLayerOptions} [options]
- * @returns {import('eslint').Linter.Config[]}
  */
 export const reactLayer = (options = {}) => {
   const {
@@ -71,10 +70,7 @@ export const reactLayer = (options = {}) => {
           {}),
 
         // React core rules (your original picks)
-        'react/jsx-no-useless-fragment': [
-          RULE_STATUSES.ERROR,
-          { allowExpressions: true },
-        ],
+        'react/jsx-no-useless-fragment': [RULE_STATUSES.ERROR, { allowExpressions: true }],
         'react/react-in-jsx-scope': RULE_STATUSES.OFF,
         'react/no-multi-comp': [RULE_STATUSES.ERROR],
         'react/jsx-newline': RULE_STATUSES.WARN,
@@ -86,10 +82,7 @@ export const reactLayer = (options = {}) => {
         'react/jsx-key': [RULE_STATUSES.ERROR],
 
         // Vite React Refresh rule
-        'react-refresh/only-export-components': [
-          RULE_STATUSES.WARN,
-          { allowConstantExport: true },
-        ],
+        'react-refresh/only-export-components': [RULE_STATUSES.WARN, { allowConstantExport: true }],
       },
     },
   ];

@@ -1,6 +1,6 @@
 import solid from 'eslint-plugin-solid';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
+import * as tsParser from '@typescript-eslint/parser';
 import unicorn from 'eslint-plugin-unicorn';
 import stylistic from '@stylistic/eslint-plugin';
 import importX from 'eslint-plugin-import-x';
@@ -19,7 +19,6 @@ export const DEFAULT_SOLID_FILES = ['**/*.tsx', '**/*.jsx'];
 
 /**
  * @param {SolidLayerOptions} [options]
- * @returns {import('eslint').Linter.Config[]}
  */
 export const solidLayer = (options = {}) => {
   const {

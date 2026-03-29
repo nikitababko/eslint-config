@@ -1,3 +1,10 @@
+/**
+ * @typedef {'off' | 'warn' | 'error'} RuleStatus
+ */
+
+/**
+ * @type {{ OFF: RuleStatus; WARN: RuleStatus; ERROR: RuleStatus }}
+ */
 export const RULE_STATUSES = {
   OFF: 'off',
   WARN: 'warn',
@@ -24,11 +31,21 @@ export const DEFAULT_IGNORES = ['node_modules', 'dist', 'build', '.idea', '.outp
 
 export const MAX_STRING_LENGTH = 100;
 
+/**
+ * @typedef {'always' | 'never'} BinaryOption
+ */
+
+/**
+ * @type {{ ALWAYS: BinaryOption; NEVER: BinaryOption }}
+ */
 export const OPTIONS = {
   ALWAYS: 'always',
   NEVER: 'never',
 };
 
+/**
+ * @type {{ WARN: 'warn'; ERROR: 'error' }}
+ */
 export const CONSOLE_METHODS = {
   WARN: 'warn',
   ERROR: 'error',

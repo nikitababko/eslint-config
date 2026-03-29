@@ -15,7 +15,6 @@ import { typescriptConfig } from './typescript.js';
  * Vanilla preset: base ESLint rules + TypeScript + stylistic + unicorn.
  *
  * @param {VanillaConfigOptions} [options]
- * @returns {import('eslint').Linter.Config[]}
  */
 export const vanillaConfig = (options = {}) => {
   const {

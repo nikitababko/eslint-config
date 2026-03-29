@@ -4,8 +4,8 @@ import { Linter } from 'eslint';
 import stylistic from '@stylistic/eslint-plugin';
 import unicorn from 'eslint-plugin-unicorn';
 import importX from 'eslint-plugin-import-x';
+import * as tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
 
 import { commonTsRules } from '../configs/typescript.js';
 import { MAX_STRING_LENGTH } from '../configs/constants.js';
@@ -322,6 +322,12 @@ describe('unicorn/prevent-abbreviations', () => {
     expect(hasRule(lint('const props = {};', rule, plugins), 'unicorn/prevent-abbreviations')).toBe(
       false,
     );
+  });
+
+  it('allows ignored abbreviation: tsconfigRootDir', () => {
+    expect(
+      hasRule(lint("const tsconfigRootDir = '.';", rule, plugins), 'unicorn/prevent-abbreviations'),
+    ).toBe(false);
   });
 });
 

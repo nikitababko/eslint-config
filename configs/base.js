@@ -31,7 +31,6 @@ const ENVIRONMENT_GLOBALS = {
 
 /**
  * @param {BaseConfigOptions} [options]
- * @returns {import('eslint').Linter.Config[]}
  */
 export const baseConfig = (options = {}) => {
   const {

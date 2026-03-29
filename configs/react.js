@@ -9,7 +9,6 @@ import { reactLayer } from './react-layer.js';
  * React preset: vanilla + React layer.
  *
  * @param {ReactConfigOptions} [options]
- * @returns {import('eslint').Linter.Config[]}
  */
 export const reactConfig = (options = {}) => {
   const {

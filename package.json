@@ -55,6 +55,7 @@
     "url": "https://github.com/nikitababko/eslint-config/issues"
   },
   "devDependencies": {
+    "@types/node": "^25.3.0",
     "@commitlint/cli": "^20.4.1",
     "@commitlint/config-conventional": "^20.4.1",
     "@eslint/js": "^9.0.0",
@@ -75,6 +76,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
+    "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   },
   "peerDependencies": {
@@ -123,6 +125,7 @@
     "lint:check": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "typecheck": "pnpm exec tsc -p tsconfig.typecheck.json",
     "test": "vitest run",
     "test:watch": "vitest"
   }

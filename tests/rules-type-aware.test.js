@@ -58,4 +58,9 @@ describe('@typescript-eslint/naming-convention', () => {
     const msgs = await lintFile('naming-bool-good.ts');
     expect(hasRule(msgs, '@typescript-eslint/naming-convention')).toBe(false);
   });
+
+  it('allows boolean object properties used as rule options', async () => {
+    const msgs = await lintFile('naming-bool-property-good.ts');
+    expect(hasRule(msgs, '@typescript-eslint/naming-convention')).toBe(false);
+  });
 });

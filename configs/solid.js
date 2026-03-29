@@ -9,7 +9,6 @@ import { solidLayer } from './solid-layer.js';
  * SolidJS preset: vanilla + Solid layer.
  *
  * @param {SolidConfigOptions} [options]
- * @returns {import('eslint').Linter.Config[]}
  */
 export const solidConfig = (options = {}) => {
   const { ignores, environment, globalsPreset, tsFiles, tsconfigPath, tsconfigRootDir, files } =
