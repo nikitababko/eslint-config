@@ -12,11 +12,18 @@ import { solidLayer } from './solid-layer.js';
  * @returns {import('eslint').Linter.Config[]}
  */
 export const solidConfig = (options = {}) => {
-  const { ignores, globalsPreset, tsFiles, tsconfigPath, tsconfigRootDir, files } =
+  const { ignores, environment, globalsPreset, tsFiles, tsconfigPath, tsconfigRootDir, files } =
     options;
 
   return [
-    ...vanillaConfig({ ignores, globalsPreset, tsFiles, tsconfigPath, tsconfigRootDir }),
+    ...vanillaConfig({
+      ignores,
+      environment,
+      globalsPreset,
+      tsFiles,
+      tsconfigPath,
+      tsconfigRootDir,
+    }),
     ...solidLayer({ files, tsconfigPath, tsconfigRootDir }),
   ];
 };

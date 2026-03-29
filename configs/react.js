@@ -14,6 +14,7 @@ import { reactLayer } from './react-layer.js';
 export const reactConfig = (options = {}) => {
   const {
     ignores,
+    environment,
     globalsPreset,
     tsFiles,
     tsconfigPath,
@@ -23,7 +24,14 @@ export const reactConfig = (options = {}) => {
   } = options;
 
   return [
-    ...vanillaConfig({ ignores, globalsPreset, tsFiles, tsconfigPath, tsconfigRootDir }),
+    ...vanillaConfig({
+      ignores,
+      environment,
+      globalsPreset,
+      tsFiles,
+      tsconfigPath,
+      tsconfigRootDir,
+    }),
     ...reactLayer({ files, tsconfigPath, tsconfigRootDir, ecmaVersion }),
   ];
 };

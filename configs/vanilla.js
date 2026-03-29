@@ -4,7 +4,8 @@ import { typescriptConfig } from './typescript.js';
 /**
  * @typedef {Object} VanillaConfigOptions
  * @property {string[]} [ignores] - Glob patterns to ignore. Default: `DEFAULT_IGNORES`.
- * @property {Record<string, boolean>} [globalsPreset] - Global variables. Default: browser + node.
+ * @property {'neutral' | 'browser' | 'node' | 'universal'} [environment] - Runtime environment. Default: `'browser'`.
+ * @property {Record<string, boolean>} [globalsPreset] - Global variables. Overrides `environment`.
  * @property {string[]} [tsFiles] - TypeScript layer file patterns. Default: `['**\/*.ts', '**\/*.tsx']`.
  * @property {string} [tsconfigPath] - Path to tsconfig.json. Default: `'./tsconfig.json'`.
  * @property {string} [tsconfigRootDir] - Root dir for tsconfig resolution. Default: `process.cwd()`.
@@ -17,10 +18,17 @@ import { typescriptConfig } from './typescript.js';
  * @returns {import('eslint').Linter.Config[]}
  */
 export const vanillaConfig = (options = {}) => {
-  const { ignores, globalsPreset, tsFiles, tsconfigPath, tsconfigRootDir } = options;
+  const {
+    ignores,
+    environment = 'browser',
+    globalsPreset,
+    tsFiles,
+    tsconfigPath,
+    tsconfigRootDir,
+  } = options;
 
   return [
-    ...baseConfig({ ignores, globalsPreset }),
+    ...baseConfig({ ignores, environment, globalsPreset }),
     ...typescriptConfig({ files: tsFiles, tsconfigPath, tsconfigRootDir }),
   ];
 };

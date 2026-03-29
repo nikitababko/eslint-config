@@ -1,7 +1,10 @@
 import type { Linter } from 'eslint';
 
+export type BaseEnvironment = 'neutral' | 'browser' | 'node' | 'universal';
+
 export interface BaseConfigOptions {
   ignores?: string[];
+  environment?: BaseEnvironment;
   globalsPreset?: Record<string, boolean>;
 }
 

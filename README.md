@@ -218,12 +218,14 @@ export default [
 
 ### Base
 
-Minimal config — `@eslint/js` recommended rules + Prettier compatibility + browser/Node globals. No TypeScript parser.
+Minimal config — `@eslint/js` recommended rules + Prettier compatibility. Neutral by default, so pick an environment explicitly for browser or Node projects. No TypeScript parser.
 
 ```js
-import base from '@nikitababko/eslint-config/base';
+import { baseConfig } from '@nikitababko/eslint-config/base';
 
-export default base;
+export default baseConfig({
+  environment: 'browser',
+});
 ```
 
 ---
@@ -253,10 +255,11 @@ All factory functions accept an options object. All options are optional.
 
 ### `baseConfig(options)`
 
-| Option          | Type                      | Default                          | Description                      |
-| --------------- | ------------------------- | -------------------------------- | -------------------------------- |
-| `ignores`       | `string[]`                | `['node_modules', 'dist', …]`    | Glob patterns to ignore globally |
-| `globalsPreset` | `Record<string, boolean>` | `globals.browser + globals.node` | Global variables for the project |
+| Option          | Type                                              | Default                       | Description                          |
+| --------------- | ------------------------------------------------- | ----------------------------- | ------------------------------------ |
+| `ignores`       | `string[]`                                        | `['node_modules', 'dist', …]` | Glob patterns to ignore globally     |
+| `environment`   | `'neutral' \| 'browser' \| 'node' \| 'universal'` | `'neutral'`                   | Runtime globals preset               |
+| `globalsPreset` | `Record<string, boolean>`                         | from `environment`            | Custom globals overriding the preset |
 
 ### `typescriptConfig(options)`
 
@@ -270,13 +273,14 @@ All factory functions accept an options object. All options are optional.
 
 Accepts all `baseConfig` options and all `typescriptConfig` options, with `files` renamed to `tsFiles`.
 
-| Option            | Type       | Default                   | Description                             |
-| ----------------- | ---------- | ------------------------- | --------------------------------------- |
-| `ignores`         | `string[]` | See `baseConfig`          | Passed to `baseConfig`                  |
-| `globalsPreset`   | `object`   | See `baseConfig`          | Passed to `baseConfig`                  |
-| `tsFiles`         | `string[]` | `['**/*.ts', '**/*.tsx']` | Passed as `files` to `typescriptConfig` |
-| `tsconfigPath`    | `string`   | `'./tsconfig.json'`       | Passed to `typescriptConfig`            |
-| `tsconfigRootDir` | `string`   | `process.cwd()`           | Passed to `typescriptConfig`            |
+| Option            | Type                                              | Default                   | Description                             |
+| ----------------- | ------------------------------------------------- | ------------------------- | --------------------------------------- |
+| `ignores`         | `string[]`                                        | See `baseConfig`          | Passed to `baseConfig`                  |
+| `environment`     | `'neutral' \| 'browser' \| 'node' \| 'universal'` | `'browser'`               | Passed to `baseConfig`                  |
+| `globalsPreset`   | `object`                                          | See `baseConfig`          | Passed to `baseConfig`                  |
+| `tsFiles`         | `string[]`                                        | `['**/*.ts', '**/*.tsx']` | Passed as `files` to `typescriptConfig` |
+| `tsconfigPath`    | `string`                                          | `'./tsconfig.json'`       | Passed to `typescriptConfig`            |
+| `tsconfigRootDir` | `string`                                          | `process.cwd()`           | Passed to `typescriptConfig`            |
 
 ### `reactConfig(options)` / `solidConfig(options)`
 
@@ -446,6 +450,7 @@ export default reactConfig({
 import { vanillaConfig } from '@nikitababko/eslint-config/vanilla';
 
 export default vanillaConfig({
+  environment: 'node',
   tsconfigPath: './tsconfig.json',
   tsconfigRootDir: import.meta.dirname,
 });
@@ -512,6 +517,25 @@ export default typescriptConfig({
   files: ['src/**/*.ts'], // only lint source, not tests/scripts
 });
 ```
+
+---
+
+### `window` or `process` is not defined
+
+**Cause:** The selected preset is using the wrong runtime globals for your project.
+
+**Fix:** Pick the right `environment` explicitly:
+
+```js
+import { vanillaConfig } from '@nikitababko/eslint-config/vanilla';
+
+export default vanillaConfig({
+  environment: 'node',
+  tsconfigPath: './tsconfig.json',
+});
+```
+
+Available values: `'browser'`, `'node'`, `'neutral'`, `'universal'`.
 
 ---
 
