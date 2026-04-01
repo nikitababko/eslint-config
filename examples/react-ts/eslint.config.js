@@ -1,3 +1,3 @@
-import react from '../../configs/react.js';
+import react from '@nikitababko/eslint-config/react';
 
 export default react;

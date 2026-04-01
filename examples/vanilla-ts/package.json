@@ -1,14 +1,25 @@
 {
-  "name": "vanilla-ts",
+  "name": "example-vanilla-ts",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "lint": "eslint . --max-warnings 0",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@nikitababko/eslint-config": "workspace:*",
+    "@stylistic/eslint-plugin": "^5.8.0",
+    "@typescript-eslint/eslint-plugin": "^8.55.0",
+    "@typescript-eslint/parser": "^8.55.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import-x": "^4.16.1",
+    "eslint-plugin-unicorn": "^63.0.0",
+    "globals": "^17.3.0",
     "typescript": "~5.9.3",
     "vite": "^7.2.4"
   }
