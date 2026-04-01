@@ -43,7 +43,8 @@ Built on top of:
 ## Features
 
 - **ESLint v9 Flat Config** — no legacy `.eslintrc` format
-- **Prettier-friendly** — all formatting rules are disabled via `eslint-config-prettier`
+- **Prettier-compatible** — uses `eslint-config-prettier` as a compatibility
+  base, then re-enables a curated set of stylistic rules aligned with Prettier
 - **Type-aware linting** — powered by `@typescript-eslint` with full project-aware rules
 - **Opinionated but escapable** — sensible defaults, easy to override per rule
 - **Modular layered architecture** — compose presets from smaller building blocks
@@ -220,7 +221,9 @@ export default [
 
 ### Base
 
-Minimal config — `@eslint/js` recommended rules + Prettier compatibility. Neutral by default, so pick an environment explicitly for browser or Node projects. No TypeScript parser.
+Minimal config — `@eslint/js` recommended rules + `eslint-config-prettier`
+compatibility layer. Neutral by default, so pick an environment explicitly for
+browser or Node projects. No TypeScript parser and no curated stylistic rules.
 
 ```js
 import { baseConfig } from '@nikitababko/eslint-config/base';
@@ -234,7 +237,8 @@ export default baseConfig({
 
 ### TypeScript layer
 
-TypeScript parser + type-aware rules + stylistic + unicorn. Intended to be composed on top of `base`.
+TypeScript parser + type-aware rules + import ordering + unicorn + a curated
+stylistic layer. Intended to be composed on top of `base`.
 
 ```js
 import base from '@nikitababko/eslint-config/base';
@@ -324,6 +328,21 @@ const isOpen = false;
 ```
 
 ### Stylistic
+
+These rules are intentionally enabled on top of `eslint-config-prettier`.
+Prettier remains the formatter, while ESLint validates that code stays within
+the package's chosen style.
+
+Recommended Prettier settings for the smoothest experience with this preset:
+
+```json
+{
+  "singleQuote": true,
+  "semi": true,
+  "tabWidth": 2,
+  "printWidth": 100
+}
+```
 
 | Rule                              | Config                                                   |
 | --------------------------------- | -------------------------------------------------------- |
