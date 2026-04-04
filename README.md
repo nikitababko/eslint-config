@@ -132,11 +132,16 @@ export default vanilla;
 **With custom options:**
 
 ```js
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { vanillaConfig } from '@nikitababko/eslint-config/vanilla';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default vanillaConfig({
   tsconfigPath: './tsconfig.json',
-  tsconfigRootDir: import.meta.dirname,
+  tsconfigRootDir: __dirname,
   ignores: ['dist', 'node_modules', 'coverage'],
 });
 ```
@@ -157,11 +162,16 @@ export default react;
 **With custom options:**
 
 ```js
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { reactConfig } from '@nikitababko/eslint-config/react';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default reactConfig({
   tsconfigPath: './tsconfig.app.json',
-  tsconfigRootDir: import.meta.dirname,
+  tsconfigRootDir: __dirname,
 });
 ```
 
@@ -195,11 +205,16 @@ export default solid;
 **With custom options:**
 
 ```js
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { solidConfig } from '@nikitababko/eslint-config/solid';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default solidConfig({
   tsconfigPath: './tsconfig.app.json',
-  tsconfigRootDir: import.meta.dirname,
+  tsconfigRootDir: __dirname,
 });
 ```
 
@@ -241,14 +256,19 @@ TypeScript parser + type-aware rules + import ordering + unicorn + a curated
 stylistic layer. Intended to be composed on top of `base`.
 
 ```js
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import base from '@nikitababko/eslint-config/base';
 import { typescriptConfig } from '@nikitababko/eslint-config/typescript';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default [
   ...base,
   ...typescriptConfig({
     tsconfigPath: './tsconfig.json',
-    tsconfigRootDir: import.meta.dirname,
+    tsconfigRootDir: __dirname,
   }),
 ];
 ```
@@ -458,22 +478,32 @@ In a monorepo, each package typically has its own `tsconfig.json`. Pass the corr
 
 ```js
 // packages/ui/eslint.config.js
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { reactConfig } from '@nikitababko/eslint-config/react';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default reactConfig({
   tsconfigPath: './tsconfig.json',
-  tsconfigRootDir: import.meta.dirname,
+  tsconfigRootDir: __dirname,
 });
 ```
 
 ```js
 // packages/server/eslint.config.js
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { vanillaConfig } from '@nikitababko/eslint-config/vanilla';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default vanillaConfig({
   environment: 'node',
   tsconfigPath: './tsconfig.json',
-  tsconfigRootDir: import.meta.dirname,
+  tsconfigRootDir: __dirname,
 });
 ```
 
@@ -506,11 +536,16 @@ The file must be included in at least one of the projects provided.
 **Fix:** Pass the correct `tsconfigPath` and make sure all linted files are included:
 
 ```js
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { vanillaConfig } from '@nikitababko/eslint-config/vanilla';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default vanillaConfig({
   tsconfigPath: './tsconfig.json',
-  tsconfigRootDir: import.meta.dirname,
+  tsconfigRootDir: __dirname,
 });
 ```
 
@@ -570,13 +605,14 @@ pnpm add -D eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslin
 
 ---
 
-### `import.meta.dirname` is not defined
+### ESM `__dirname` helper for Node.js 18+
 
-If you're on Node.js < 20.11 or using CommonJS, use this polyfill instead:
+Node.js 18 does not provide `import.meta.dirname`, so use this ESM-compatible
+helper when you need `tsconfigRootDir`:
 
 ```js
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 ```
