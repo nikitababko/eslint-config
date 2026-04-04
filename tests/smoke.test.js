@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import base from '../configs/base.js';
+import base, { baseConfig } from '../configs/base.js';
 import typescript, { typescriptConfig } from '../configs/typescript.js';
 import vanilla, { vanillaConfig } from '../configs/vanilla.js';
 import react, {
@@ -48,6 +48,13 @@ describe('Smoke: all configs load and have valid shape', () => {
 });
 
 describe('Smoke: factory functions accept options', () => {
+  it('baseConfig({ environment }) returns array', () => {
+    const result = baseConfig({ environment: 'node' });
+
+    expect(Array.isArray(result)).toBe(true);
+    expect(result.length).toBe(base.length);
+  });
+
   it('typescriptConfig() returns array', () => {
     expect(Array.isArray(typescriptConfig())).toBe(true);
   });
