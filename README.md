@@ -289,11 +289,11 @@ All factory functions accept an options object. All options are optional.
 
 ### `typescriptConfig(options)`
 
-| Option            | Type       | Default                   | Description                        |
-| ----------------- | ---------- | ------------------------- | ---------------------------------- |
-| `files`           | `string[]` | `['**/*.ts', '**/*.tsx']` | File patterns to apply TS rules to |
-| `tsconfigPath`    | `string`   | `'./tsconfig.json'`       | Path to `tsconfig.json`            |
-| `tsconfigRootDir` | `string`   | `process.cwd()`           | Root dir for tsconfig resolution   |
+| Option            | Type       | Default                   | Description                           |
+| ----------------- | ---------- | ------------------------- | ------------------------------------- |
+| `files`           | `string[]` | `['**/*.ts', '**/*.tsx']` | File patterns to lint with this layer |
+| `tsconfigPath`    | `string`   | `'./tsconfig.json'`       | Path to `tsconfig.json`               |
+| `tsconfigRootDir` | `string`   | `process.cwd()`           | Root dir for tsconfig resolution      |
 
 ### `vanillaConfig(options)`
 

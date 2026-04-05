@@ -64,6 +64,14 @@ describe('Smoke: factory functions accept options', () => {
     expect(result[0].files).toContain('**/*.ts');
   });
 
+  it('typescriptConfig({ files }) does not add a hidden js-only entry', () => {
+    const result = typescriptConfig({ files: ['src/**/*.ts'] });
+
+    expect(
+      result.some((entry) => Array.isArray(entry.files) && entry.files.includes('**/*.js')),
+    ).toBe(false);
+  });
+
   it('vanillaConfig() returns array', () => {
     expect(Array.isArray(vanillaConfig())).toBe(true);
   });
@@ -175,8 +183,8 @@ describe('Smoke: preset entrypoints re-export layer helpers', () => {
 
 describe('Smoke: layers are self-contained and minimal', () => {
   // reactLayer and solidLayer must return exactly 1 config entry each.
-  // If they were accidentally pulling in typescriptConfig() internally,
-  // they would return more than 1 entry (typescriptConfig returns 2 entries).
+  // If they were accidentally pulling in other presets internally,
+  // they would return more than a single layer entry.
   it('reactLayer() returns exactly 1 config entry', () => {
     expect(reactLayer().length).toBe(1);
   });

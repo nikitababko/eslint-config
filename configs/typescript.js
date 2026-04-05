@@ -40,6 +40,7 @@ export const commonTsRules = {
   '@typescript-eslint/no-explicit-any': RULE_STATUSES.WARN,
   '@typescript-eslint/no-floating-promises': RULE_STATUSES.WARN,
   '@typescript-eslint/no-misused-promises': RULE_STATUSES.ERROR,
+  '@typescript-eslint/no-require-imports': RULE_STATUSES.ERROR,
   '@typescript-eslint/naming-convention': [
     RULE_STATUSES.ERROR,
     {
@@ -100,7 +101,7 @@ export const DEFAULT_TS_FILES = ['**/*.ts', '**/*.tsx'];
 
 /**
  * @typedef {Object} TypescriptConfigOptions
- * @property {string[]} [files] - File patterns to lint. Default: `['**\/*.ts', '**\/*.tsx']`.
+ * @property {string[]} [files] - File patterns to lint with this layer. Default: `['**\/*.ts', '**\/*.tsx']`.
  * @property {string} [tsconfigPath] - Path to tsconfig.json. Default: `'./tsconfig.json'`.
  * @property {string} [tsconfigRootDir] - Root dir for tsconfig resolution. Default: `process.cwd()`.
  */
@@ -137,18 +138,6 @@ export const typescriptConfig = (options = {}) => {
       },
       rules: {
         ...commonTsRules,
-      },
-    },
-
-    {
-      files: ['**/*.js'],
-      plugins: {
-        '@typescript-eslint': tsPlugin,
-        unicorn,
-      },
-      rules: {
-        '@typescript-eslint/no-require-imports': RULE_STATUSES.ERROR,
-        'unicorn/prefer-module': RULE_STATUSES.OFF,
       },
     },
   ];

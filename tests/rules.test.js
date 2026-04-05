@@ -425,3 +425,16 @@ describe('@typescript-eslint/consistent-type-imports', () => {
     expect(hasRule(lintTS(code, rule), '@typescript-eslint/consistent-type-imports')).toBe(false);
   });
 });
+
+// ─── @typescript-eslint/no-require-imports ───────────────────────────────────
+
+describe('@typescript-eslint/no-require-imports', () => {
+  const rule = {
+    '@typescript-eslint/no-require-imports': commonTsRules['@typescript-eslint/no-require-imports'],
+  };
+
+  it('errors on CommonJS require imports', () => {
+    const code = "const fs = require('node:fs');";
+    expect(hasRule(lintTS(code, rule), '@typescript-eslint/no-require-imports')).toBe(true);
+  });
+});
