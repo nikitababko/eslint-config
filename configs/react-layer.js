@@ -10,11 +10,11 @@ import importX from 'eslint-plugin-import-x';
 import { commonTsRules } from './typescript.js';
 import { RULE_STATUSES } from './constants.js';
 
-export const DEFAULT_REACT_FILES = ['**/*.tsx', '**/*.jsx'];
+export const DEFAULT_REACT_FILES = ['**/*.tsx'];
 
 /**
  * @typedef {Object} ReactLayerOptions
- * @property {string[]} [files] - File patterns to lint. Default: `['**\/*.tsx', '**\/*.jsx']`.
+ * @property {string[]} [files] - File patterns to lint. Default: `['**\/*.tsx']`.
  * @property {string} [tsconfigPath] - Path to tsconfig.json. Default: `'./tsconfig.json'`.
  * @property {string} [tsconfigRootDir] - Root dir for tsconfig resolution. Default: `process.cwd()`.
  * @property {number | 'latest'} [ecmaVersion] - ECMAScript version. Default: `'latest'`.

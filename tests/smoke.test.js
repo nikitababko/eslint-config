@@ -129,6 +129,14 @@ describe('Smoke: factory functions accept options', () => {
     const result = solidLayer({ files: ['**/*.tsx'] });
     expect(result[0].files).toContain('**/*.tsx');
   });
+
+  it('reactLayer() defaults to TSX files only', () => {
+    expect(DEFAULT_REACT_FILES).toEqual(['**/*.tsx']);
+  });
+
+  it('solidLayer() defaults to TSX files only', () => {
+    expect(DEFAULT_SOLID_FILES).toEqual(['**/*.tsx']);
+  });
 });
 
 describe('Smoke: configs contain expected plugins', () => {

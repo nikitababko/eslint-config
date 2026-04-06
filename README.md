@@ -150,7 +150,7 @@ export default vanillaConfig({
 
 ### React
 
-**Vanilla + React** — all vanilla rules plus React, React Hooks, and React Refresh rules for `.tsx`/`.jsx` files.
+**Vanilla + React** — all vanilla rules plus React, React Hooks, and React Refresh rules for `.tsx` files by default.
 
 ```js
 // eslint.config.js
@@ -189,11 +189,27 @@ export default [
 ];
 ```
 
+To lint `*.jsx` too, opt in explicitly and make sure those files are included by
+your TypeScript config via `allowJs: true` or a dedicated `tsconfig.eslint.json`:
+
+```js
+import vanilla from '@nikitababko/eslint-config/vanilla';
+import { reactLayer } from '@nikitababko/eslint-config/react';
+
+export default [
+  ...vanilla,
+  ...reactLayer({
+    files: ['**/*.tsx', '**/*.jsx'],
+    tsconfigPath: './tsconfig.eslint.json',
+  }),
+];
+```
+
 ---
 
 ### SolidJS
 
-**Vanilla + SolidJS** — all vanilla rules plus SolidJS-specific reactivity and JSX rules for `.tsx`/`.jsx` files.
+**Vanilla + SolidJS** — all vanilla rules plus SolidJS-specific reactivity and JSX rules for `.tsx` files by default.
 
 ```js
 // eslint.config.js
@@ -228,6 +244,22 @@ export default [
   ...vanilla,
   ...solidLayer({
     tsconfigPath: './tsconfig.app.json',
+  }),
+];
+```
+
+To lint `*.jsx` too, opt in explicitly and make sure those files are included by
+your TypeScript config via `allowJs: true` or a dedicated `tsconfig.eslint.json`:
+
+```js
+import vanilla from '@nikitababko/eslint-config/vanilla';
+import { solidLayer } from '@nikitababko/eslint-config/solid';
+
+export default [
+  ...vanilla,
+  ...solidLayer({
+    files: ['**/*.tsx', '**/*.jsx'],
+    tsconfigPath: './tsconfig.eslint.json',
   }),
 ];
 ```
@@ -312,12 +344,12 @@ Accepts all `baseConfig` options and all `typescriptConfig` options, with `files
 
 Accepts all `vanillaConfig` options plus:
 
-| Option            | Type                 | Default                    | Description                             |
-| ----------------- | -------------------- | -------------------------- | --------------------------------------- |
-| `files`           | `string[]`           | `['**/*.tsx', '**/*.jsx']` | File patterns for the React/Solid layer |
-| `tsconfigPath`    | `string`             | `'./tsconfig.json'`        | Passed to both vanilla and the layer    |
-| `tsconfigRootDir` | `string`             | `process.cwd()`            | Passed to both vanilla and the layer    |
-| `ecmaVersion`     | `number \| 'latest'` | `'latest'` _(React only)_  | ECMAScript version for the parser       |
+| Option            | Type                 | Default                   | Description                             |
+| ----------------- | -------------------- | ------------------------- | --------------------------------------- |
+| `files`           | `string[]`           | `['**/*.tsx']`            | File patterns for the React/Solid layer |
+| `tsconfigPath`    | `string`             | `'./tsconfig.json'`       | Passed to both vanilla and the layer    |
+| `tsconfigRootDir` | `string`             | `process.cwd()`           | Passed to both vanilla and the layer    |
+| `ecmaVersion`     | `number \| 'latest'` | `'latest'` _(React only)_ | ECMAScript version for the parser       |
 
 ---
 
@@ -400,7 +432,7 @@ import { MyComponent } from './my-component';
 import type { MyType } from './types';
 ```
 
-### React (`.tsx`/`.jsx` files)
+### React (`.tsx` by default)
 
 | Rule                                   | Severity    | Notes                                       |
 | -------------------------------------- | ----------- | ------------------------------------------- |
@@ -415,7 +447,7 @@ import type { MyType } from './types';
 | `react-refresh/only-export-components` | warn        | For Vite HMR compatibility                  |
 | `react-hooks/*`                        | recommended | Standard hooks rules                        |
 
-### SolidJS (`.tsx`/`.jsx` files)
+### SolidJS (`.tsx` by default)
 
 | Rule                           | Severity | Notes                                                  |
 | ------------------------------ | -------- | ------------------------------------------------------ |
@@ -602,6 +634,17 @@ Install only the packages relevant to your preset. For vanilla TypeScript:
 ```bash
 pnpm add -D eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
 ```
+
+---
+
+### `*.jsx` files are not covered by default
+
+**Cause:** The React and Solid presets are project-aware and default to `*.tsx`
+only, so `*.jsx` must be opted into explicitly.
+
+**Fix:** Pass `files: ['**/*.tsx', '**/*.jsx']` and make sure your TypeScript
+config includes those files via `allowJs: true` or a dedicated
+`tsconfig.eslint.json`.
 
 ---
 
