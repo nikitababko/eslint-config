@@ -2,7 +2,7 @@ import js from '@eslint/js';
 import globals from 'globals';
 import prettier from 'eslint-config-prettier';
 
-import { DEFAULT_IGNORES, RULE_STATUSES } from './constants.js';
+import { DEFAULT_IGNORES } from './constants.js';
 
 const BASE_ENVIRONMENTS = {
   NEUTRAL: 'neutral',
@@ -50,14 +50,6 @@ export const baseConfig = (options = {}) => {
     {
       languageOptions: {
         globals: resolvedGlobalsPreset,
-      },
-      rules: {
-        'no-multi-spaces': [
-          RULE_STATUSES.ERROR,
-          {
-            ignoreEOLComments: true,
-          },
-        ],
       },
     },
   ];
