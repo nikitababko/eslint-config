@@ -92,6 +92,8 @@ describe('Packaging smoke', () => {
       expect.arrayContaining([
         'package/package.json',
         'package/README.md',
+        'package/configs/index.js',
+        'package/configs/index.d.ts',
         'package/configs/base.js',
         'package/configs/base.d.ts',
         'package/configs/typescript.js',
@@ -117,7 +119,7 @@ describe('Packaging smoke', () => {
 
       console.log(JSON.stringify({
         rootDefaultIsArray: Array.isArray(root.default),
-        hasVanillaConfig: typeof root.vanillaConfig === 'function',
+        rootHasNamedExports: Object.keys(root).some((key) => key !== 'default'),
         baseDefaultIsArray: Array.isArray(base.default),
         hasBaseConfig: typeof base.baseConfig === 'function',
         typescriptDefaultIsArray: Array.isArray(typescript.default),
@@ -133,7 +135,7 @@ describe('Packaging smoke', () => {
 
     expect(JSON.parse(output)).toEqual({
       rootDefaultIsArray: true,
-      hasVanillaConfig: true,
+      rootHasNamedExports: false,
       baseDefaultIsArray: true,
       hasBaseConfig: true,
       typescriptDefaultIsArray: true,

@@ -2,12 +2,12 @@
   "name": "@nikitababko/eslint-config",
   "version": "0.1.0",
   "type": "module",
-  "types": "./configs/vanilla.d.ts",
+  "types": "./configs/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./configs/vanilla.d.ts",
-      "default": "./configs/vanilla.js"
+      "types": "./configs/index.d.ts",
+      "default": "./configs/index.js"
     },
     "./base": {
       "types": "./configs/base.d.ts",
