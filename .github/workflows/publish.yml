@@ -1,9 +1,9 @@
-name: "🚀 publish"
+name: '🚀 publish'
 
 on:
   push:
     tags:
-      - "v*"
+      - 'v*'
 
 permissions:
   contents: read
@@ -125,4 +125,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           body_path: release-notes.md
-          files: "*.tgz"
+          files: '*.tgz'

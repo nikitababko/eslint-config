@@ -13,6 +13,10 @@ module.exports = {
       name: 'docs:     Documentation changes',
     },
     {
+      value: 'style',
+      name: 'style:    Formatting / style-only changes',
+    },
+    {
       value: 'refactor',
       name: 'refactor: Code improvements without behavior change',
     },
