@@ -81,13 +81,27 @@ yarn add -D @nikitababko/eslint-config eslint @eslint/js @typescript-eslint/esli
 For **React** projects, also install:
 
 ```bash
+# npm
+npm install -D eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh
+
+# pnpm
 pnpm add -D eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh
+
+# yarn
+yarn add -D eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh
 ```
 
 For **SolidJS** projects:
 
 ```bash
+# npm
+npm install -D eslint-plugin-solid
+
+# pnpm
 pnpm add -D eslint-plugin-solid
+
+# yarn
+yarn add -D eslint-plugin-solid
 ```
 
 > Only the framework-specific packages are optional peer dependencies — install
@@ -632,7 +646,14 @@ Available values: `'browser'`, `'node'`, `'neutral'`, `'universal'`.
 Install only the packages relevant to your preset. For vanilla TypeScript:
 
 ```bash
+# npm
+npm install -D eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
+
+# pnpm
 pnpm add -D eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
+
+# yarn
+yarn add -D eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
 ```
 
 ---
