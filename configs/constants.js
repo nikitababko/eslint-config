@@ -27,7 +27,19 @@ export const BOOLEAN_PREFIXES = [
   'requires',
 ];
 
-export const DEFAULT_IGNORES = ['node_modules', 'dist', 'build', '.idea', '.output', '.cache'];
+export const DEFAULT_IGNORES = [
+  'node_modules',
+  '**/node_modules',
+  'dist',
+  '**/dist',
+  'build',
+  '**/build',
+  '.idea',
+  '.output',
+  '**/.output',
+  '.cache',
+  '**/.cache',
+];
 
 export const MAX_STRING_LENGTH = 100;
 

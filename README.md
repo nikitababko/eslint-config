@@ -669,8 +669,14 @@ Contributions, bug reports, and feature requests are welcome.
 1. Fork the repository
 2. Create a branch: `git checkout -b feat/my-feature`
 3. Make your changes
-4. Run tests: `pnpm test`
-5. Run lint: `pnpm lint:check`
+4. Run the full verification flow:
+   - `pnpm test` - unit tests plus example build smoke
+   - `pnpm lint:check`
+   - `pnpm typecheck`
+   - `pnpm format:check`
+5. Helpful individual commands:
+   - `pnpm test:unit` - run Vitest only
+   - `pnpm examples:build` - build all example consumer projects only
 6. Commit using [Conventional Commits](https://www.conventionalcommits.org): `pnpm commit`
 7. Open a Pull Request
 

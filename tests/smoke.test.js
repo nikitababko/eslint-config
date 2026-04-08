@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import base, { baseConfig } from '../configs/base.js';
+import { DEFAULT_IGNORES } from '../configs/constants.js';
 import typescript, { typescriptConfig } from '../configs/typescript.js';
 import vanilla, { vanillaConfig } from '../configs/vanilla.js';
 import react, {
@@ -53,6 +54,12 @@ describe('Smoke: factory functions accept options', () => {
 
     expect(Array.isArray(result)).toBe(true);
     expect(result.length).toBe(base.length);
+  });
+
+  it('baseConfig() ignores nested build outputs by default', () => {
+    expect(DEFAULT_IGNORES).toEqual(
+      expect.arrayContaining(['**/node_modules', '**/dist', '**/build', '**/.output', '**/.cache']),
+    );
   });
 
   it('typescriptConfig() returns array', () => {
