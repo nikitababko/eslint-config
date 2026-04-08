@@ -1,5 +1,5 @@
 {
-  "**/*.{cjs,js,mjs,jsx,ts,tsx}": ["eslint --max-warnings 0", "prettier --check"],
-  "**/*.{json,md,yml,yaml}": ["prettier --check"],
-  ".prettierrc": ["prettier --check"]
+  "**/*.{cjs,js,mjs,jsx,ts,tsx}": ["eslint --fix --max-warnings 0", "prettier --write"],
+  "**/*.{json,md,yml,yaml}": ["prettier --write"],
+  ".prettierrc": ["prettier --write"]
 }
