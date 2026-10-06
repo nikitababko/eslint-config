@@ -197,15 +197,13 @@ describe('Smoke: preset entrypoints re-export layer helpers', () => {
 });
 
 describe('Smoke: layers are self-contained and minimal', () => {
-  // reactLayer and solidLayer must return exactly 1 config entry each.
-  // If they were accidentally pulling in other presets internally,
-  // they would return more than a single layer entry.
-  it('reactLayer() returns exactly 1 config entry', () => {
-    expect(reactLayer().length).toBe(1);
+  // Each layer contains its own rules and the scoped TypeScript compatibility entry.
+  it('reactLayer() returns exactly 2 config entries', () => {
+    expect(reactLayer().length).toBe(2);
   });
 
-  it('solidLayer() returns exactly 1 config entry', () => {
-    expect(solidLayer().length).toBe(1);
+  it('solidLayer() returns exactly 2 config entries', () => {
+    expect(solidLayer().length).toBe(2);
   });
 
   it('solidConfig has more entries than solidLayer alone', () => {

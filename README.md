@@ -301,6 +301,12 @@ export default baseConfig({
 TypeScript parser + type-aware rules + import ordering + unicorn + a curated
 stylistic layer. Intended to be composed on top of `base`.
 
+Includes typescript-eslint's [`eslint-recommended` compatibility rules](https://typescript-eslint.io/users/configs/#eslint-recommended)
+for TypeScript files selected by the layer. Checks such as `no-undef`,
+`no-redeclare`, and `no-dupe-class-members` are delegated to the TypeScript
+compiler, allowing function overloads, declaration merging, and ambient types.
+Run `tsc --noEmit` alongside ESLint to catch compiler errors.
+
 ```js
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';

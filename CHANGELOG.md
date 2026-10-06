@@ -9,7 +9,11 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-- (Nothing yet)
+### Fixed
+
+- Prevent false ESLint errors on TypeScript function overloads, declaration
+  merging, and ambient types such as `NodeJS.Process` by applying
+  typescript-eslint's `eslint-recommended` compatibility rules across TS layers.
 
 ---
 

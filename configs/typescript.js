@@ -11,6 +11,7 @@ import {
   OPTIONS,
   RULE_STATUSES,
 } from './constants.js';
+import { typescriptCompatibilityConfig } from './typescript-compatibility.js';
 
 export const commonTsRules = {
   // Base
@@ -140,6 +141,7 @@ export const typescriptConfig = (options = {}) => {
         ...commonTsRules,
       },
     },
+    typescriptCompatibilityConfig(files),
   ];
 };
 

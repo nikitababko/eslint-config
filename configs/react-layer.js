@@ -9,6 +9,7 @@ import importX from 'eslint-plugin-import-x';
 
 import { commonTsRules } from './typescript.js';
 import { RULE_STATUSES } from './constants.js';
+import { typescriptCompatibilityConfig } from './typescript-compatibility.js';
 
 export const DEFAULT_REACT_FILES = ['**/*.tsx'];
 
@@ -85,6 +86,7 @@ export const reactLayer = (options = {}) => {
         'react-refresh/only-export-components': [RULE_STATUSES.WARN, { allowConstantExport: true }],
       },
     },
+    typescriptCompatibilityConfig(files),
   ];
 };
 
