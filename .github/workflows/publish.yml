@@ -10,8 +10,12 @@ permissions:
   id-token: write
 
 jobs:
+  checks:
+    uses: ./.github/workflows/ci.yml
+
   publish-npm:
     name: Publish to npmjs
+    needs: checks
     runs-on: ubuntu-latest
     permissions:
       contents: read

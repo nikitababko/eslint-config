@@ -4,7 +4,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/@nikitababko/eslint-config?style=flat-square)](https://www.npmjs.com/package/@nikitababko/eslint-config)
 [![license](https://img.shields.io/npm/l/@nikitababko/eslint-config?style=flat-square)](LICENSE)
 [![Node.js](https://img.shields.io/node/v/@nikitababko/eslint-config?style=flat-square)](https://nodejs.org)
-[![ESLint](https://img.shields.io/badge/ESLint-9%2B-4B32C3?style=flat-square&logo=eslint)](https://eslint.org)
+[![ESLint](https://img.shields.io/badge/ESLint-9.38%2B%20%28%3C10%29-4B32C3?style=flat-square&logo=eslint)](https://eslint.org)
 
 Shareable **ESLint Flat Config** presets for modern TypeScript projects — with support for vanilla TS, React, and SolidJS.
 
@@ -55,10 +55,15 @@ Built on top of:
 
 ## Requirements
 
-| Dependency | Version |
-| ---------- | ------- |
-| Node.js    | ≥ 18    |
-| ESLint     | ≥ 9     |
+| Dependency | Version                                |
+| ---------- | -------------------------------------- |
+| Node.js    | `^20.19.0 \|\| ^22.13.0 \|\| >=24.0.0` |
+| ESLint     | `^9.38.0`                              |
+
+These requirements include the plugins and their transitive dependencies.
+Unicorn 63 requires ESLint 9.38.0+, and fresh installs can resolve
+`eslint-visitor-keys` 5 through typescript-eslint, which requires Node.js
+`^20.19.0 || ^22.13.0 || >=24`.
 
 ---
 
@@ -69,13 +74,13 @@ Install the package and the shared peer dependencies used by the default presets
 
 ```bash
 # npm
-npm install -D @nikitababko/eslint-config eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
+npm install -D @nikitababko/eslint-config eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
 
 # pnpm
-pnpm add -D @nikitababko/eslint-config eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
+pnpm add -D @nikitababko/eslint-config eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
 
 # yarn
-yarn add -D @nikitababko/eslint-config eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
+yarn add -D @nikitababko/eslint-config eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
 ```
 
 For **React** projects, also install:
@@ -653,13 +658,13 @@ Install only the packages relevant to your preset. For vanilla TypeScript:
 
 ```bash
 # npm
-npm install -D eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
+npm install -D eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
 
 # pnpm
-pnpm add -D eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
+pnpm add -D eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
 
 # yarn
-yarn add -D eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
+yarn add -D eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
 ```
 
 ---
@@ -675,10 +680,9 @@ config includes those files via `allowJs: true` or a dedicated
 
 ---
 
-### ESM `__dirname` helper for Node.js 18+
+### ESM `__dirname` helper
 
-Node.js 18 does not provide `import.meta.dirname`, so use this ESM-compatible
-helper when you need `tsconfigRootDir`:
+Use this ESM-compatible helper when you need `tsconfigRootDir`:
 
 ```js
 import { dirname } from 'node:path';
@@ -690,6 +694,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 ---
 
 ## Contributing
+
+Use a supported Node.js version listed above for development.
 
 Contributions, bug reports, and feature requests are welcome.
 
@@ -704,6 +710,9 @@ Contributions, bug reports, and feature requests are welcome.
 5. Helpful individual commands:
    - `pnpm test:unit` - run Vitest only
    - `pnpm examples:build` - build all example consumer projects only
+   - `pnpm test:minimum` - pack and test every preset in an isolated consumer with
+     exact minimum peer versions, without the workspace lockfile. CI runs this
+     on Node.js 20.19.0, 22.13.0, and 24.0.0 with strict engine and peer checks.
 6. Commit using [Conventional Commits](https://www.conventionalcommits.org): `pnpm commit`
 7. Open a Pull Request
 

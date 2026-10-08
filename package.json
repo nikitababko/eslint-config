@@ -44,7 +44,7 @@
     "solid"
   ],
   "engines": {
-    "node": ">=18"
+    "node": "^20.19.0 || ^22.13.0 || >=24.0.0"
   },
   "license": "MIT",
   "repository": {
@@ -58,13 +58,13 @@
     "@types/node": "^25.3.0",
     "@commitlint/cli": "^20.4.1",
     "@commitlint/config-conventional": "^20.4.1",
-    "@eslint/js": "^9.0.0",
+    "@eslint/js": "^9.38.0",
     "@stylistic/eslint-plugin": "^5.8.0",
     "@typescript-eslint/eslint-plugin": "^8.55.0",
     "@typescript-eslint/parser": "^8.55.0",
     "commitizen": "^4.3.1",
     "cz-customizable": "^7.5.1",
-    "eslint": "^9.0.0",
+    "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import-x": "^4.16.1",
     "eslint-plugin-react": "^7.37.5",
@@ -80,11 +80,11 @@
     "vitest": "^4.0.18"
   },
   "peerDependencies": {
-    "@eslint/js": "^9.0.0",
+    "@eslint/js": "^9.38.0",
     "@stylistic/eslint-plugin": "^5.8.0",
     "@typescript-eslint/eslint-plugin": "^8.55.0",
     "@typescript-eslint/parser": "^8.55.0",
-    "eslint": "^9.0.0",
+    "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import-x": "^4.16.1",
     "eslint-plugin-react": "^7.37.5",
@@ -125,6 +125,7 @@
     "format:check": "prettier --check .",
     "typecheck": "pnpm exec tsc -p tsconfig.typecheck.json",
     "test": "pnpm test:unit && pnpm examples:build",
+    "test:minimum": "node scripts/test-minimum-versions.js",
     "test:unit": "vitest run",
     "test:watch": "vitest"
   }

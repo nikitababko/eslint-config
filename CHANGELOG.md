@@ -11,6 +11,10 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- Align requirements with Unicorn 63 and fresh transitive dependencies:
+  Node.js `^20.19.0 || ^22.13.0 || >=24.0.0` and ESLint `^9.38.0`. Verify exact
+  minimum peer versions in an isolated packed consumer on each minimum Node.js
+  version in CI, and require these checks before publishing.
 - Prevent false ESLint errors on TypeScript function overloads, declaration
   merging, and ambient types such as `NodeJS.Process` by applying
   typescript-eslint's `eslint-recommended` compatibility rules across TS layers.
