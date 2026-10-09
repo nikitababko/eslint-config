@@ -31,6 +31,7 @@ await writeFile('component.tsx', 'export const ready: boolean = true;\n');
 const presets = [
   ['', 'sample.ts'],
   ['/base', 'sample.js'],
+  ['/stylistic', 'sample.js'],
   ['/typescript', 'sample.ts'],
   ['/vanilla', 'sample.ts'],
   ['/react', 'component.tsx'],
@@ -45,7 +46,7 @@ for (const [subpath, file] of presets) {
   const eslint = new ESLint({ overrideConfigFile: true, overrideConfig: config });
   const [result] = await eslint.lintFiles([file]);
   assert.equal(result.fatalErrorCount, 0, `${name}: ${JSON.stringify(result.messages)}`);
-  if (subpath === '/base') {
+  if (subpath === '/base' || subpath === '/stylistic') {
     assert.equal(result.errorCount, 0, `${name} must lint JavaScript`);
   } else {
     assert.ok(

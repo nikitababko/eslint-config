@@ -29,6 +29,7 @@ Built on top of:
   - [SolidJS](#solidjs)
   - [Base (JS only)](#base)
   - [TypeScript layer](#typescript-layer)
+  - [Stylistic layer (optional)](#stylistic-layer)
 - [Configuration Options](#configuration-options)
 - [Key Rules](#key-rules)
 - [Overriding Rules](#overriding-rules)
@@ -43,8 +44,8 @@ Built on top of:
 ## Features
 
 - **ESLint v9 Flat Config** — no legacy `.eslintrc` format
-- **Prettier-compatible** — uses `eslint-config-prettier` as a compatibility
-  base, then re-enables a curated set of stylistic rules aligned with Prettier
+- **Prettier-compatible** — default presets leave formatting to Prettier;
+  stricter formatting checks are available in an optional stylistic layer
 - **Type-aware linting** — powered by `@typescript-eslint` with full project-aware rules
 - **Opinionated but escapable** — sensible defaults, easy to override per rule
 - **Modular layered architecture** — compose presets from smaller building blocks
@@ -138,7 +139,7 @@ npx eslint .
 
 ### Vanilla
 
-**Default preset** — TypeScript + stylistic + unicorn + import rules. Best for framework-agnostic TypeScript projects.
+**Default preset** — TypeScript + unicorn + import rules. Best for framework-agnostic TypeScript projects.
 
 ```js
 // eslint.config.js
@@ -303,8 +304,8 @@ export default baseConfig({
 
 ### TypeScript layer
 
-TypeScript parser + type-aware rules + import ordering + unicorn + a curated
-stylistic layer. Intended to be composed on top of `base`.
+TypeScript parser + type-aware rules + import ordering + unicorn.
+Intended to be composed on top of `base`.
 
 Includes typescript-eslint's [`eslint-recommended` compatibility rules](https://typescript-eslint.io/users/configs/#eslint-recommended)
 for TypeScript files selected by the layer. Checks such as `no-undef`,
@@ -332,6 +333,34 @@ export default [
 
 ---
 
+### Stylistic layer
+
+Optional formatting checks for projects that want ESLint to enforce the package's
+chosen style. Append this layer **after** your language or framework preset:
+
+```js
+import vanilla from '@nikitababko/eslint-config/vanilla';
+import stylistic from '@nikitababko/eslint-config/stylistic';
+
+export default [...vanilla, ...stylistic];
+```
+
+To limit checks to specific files, use `stylisticConfig({ files: ['src/**/*.ts'] })`.
+The layer supplies formatting rules and the Stylistic plugin; the preceding preset
+supplies the parser and language rules.
+
+Default presets no longer enable these formatting rules, including
+`no-multiple-empty-lines`, and `commonTsRules` contains only the shared language
+and code-quality rules. To keep formatting checks from earlier versions, append
+this layer. React's `react/jsx-newline` is no longer enabled; Prettier controls JSX
+line breaks.
+
+If you use Prettier, keep this optional layer disabled to allow any Prettier options
+and avoid duplicate formatting checks. This follows
+[eslint-config-prettier's guidance](https://github.com/prettier/eslint-config-prettier#installation).
+
+---
+
 ## Configuration Options
 
 All factory functions accept an options object. All options are optional.
@@ -351,6 +380,12 @@ All factory functions accept an options object. All options are optional.
 | `files`           | `string[]` | `['**/*.ts', '**/*.tsx']` | File patterns to lint with this layer |
 | `tsconfigPath`    | `string`   | `'./tsconfig.json'`       | Path to `tsconfig.json`               |
 | `tsconfigRootDir` | `string`   | `process.cwd()`           | Root dir for tsconfig resolution      |
+
+### `stylisticConfig(options)`
+
+| Option  | Type       | Default                            | Description                                  |
+| ------- | ---------- | ---------------------------------- | -------------------------------------------- |
+| `files` | `string[]` | `['**/*.{js,jsx,mjs,cjs,ts,tsx}']` | File patterns for optional formatting checks |
 
 ### `vanillaConfig(options)`
 
@@ -406,11 +441,10 @@ const isOpen = false;
 
 ### Stylistic
 
-These rules are intentionally enabled on top of `eslint-config-prettier`.
-Prettier remains the formatter, while ESLint validates that code stays within
-the package's chosen style.
+These rules are enabled **only** by the optional `stylistic` layer. Default
+presets leave formatting to Prettier.
 
-Recommended Prettier settings for the smoothest experience with this preset:
+Settings closest to this optional layer's style:
 
 ```json
 {
@@ -424,13 +458,19 @@ Recommended Prettier settings for the smoothest experience with this preset:
 | Rule                              | Config                                                   |
 | --------------------------------- | -------------------------------------------------------- |
 | `@stylistic/indent`               | 2 spaces                                                 |
-| `@stylistic/quotes`               | single quotes                                            |
+| `@stylistic/quotes`               | single quotes, double quotes allowed to avoid escaping   |
 | `@stylistic/semi`                 | always                                                   |
 | `@stylistic/max-len`              | 100 chars (strings, comments, template literals ignored) |
 | `@stylistic/comma-dangle`         | always-multiline                                         |
 | `@stylistic/arrow-parens`         | always — `(x) => x`                                      |
 | `@stylistic/brace-style`          | 1tbs                                                     |
 | `@stylistic/object-curly-spacing` | always — `{ a: 1 }`                                      |
+| `@stylistic/block-spacing`        | always — `{ return value; }`                             |
+| `no-multiple-empty-lines`         | at most one blank line, none at start/end of file        |
+
+The optional layer can still disagree with Prettier on indentation and lines
+that Prettier cannot shorten. Its quotes rule uses `avoidEscape: true`, so
+`"don't"` is accepted without forcing an escaped apostrophe.
 
 ### Unicorn
 
@@ -568,14 +608,15 @@ export default vanillaConfig({
 
 ## Available Exports
 
-| Import path                             | Default export               | Named exports                                           |
-| --------------------------------------- | ---------------------------- | ------------------------------------------------------- |
-| `@nikitababko/eslint-config`            | `vanillaConfig()` (array)    | —                                                       |
-| `@nikitababko/eslint-config/base`       | `baseConfig()` (array)       | `baseConfig`                                            |
-| `@nikitababko/eslint-config/typescript` | `typescriptConfig()` (array) | `typescriptConfig`, `commonTsRules`, `DEFAULT_TS_FILES` |
-| `@nikitababko/eslint-config/vanilla`    | `vanillaConfig()` (array)    | `vanillaConfig`                                         |
-| `@nikitababko/eslint-config/react`      | `reactConfig()` (array)      | `reactConfig`, `reactLayer`, `DEFAULT_REACT_FILES`      |
-| `@nikitababko/eslint-config/solid`      | `solidConfig()` (array)      | `solidConfig`, `solidLayer`, `DEFAULT_SOLID_FILES`      |
+| Import path                             | Default export               | Named exports                                                  |
+| --------------------------------------- | ---------------------------- | -------------------------------------------------------------- |
+| `@nikitababko/eslint-config`            | `vanillaConfig()` (array)    | —                                                              |
+| `@nikitababko/eslint-config/base`       | `baseConfig()` (array)       | `baseConfig`                                                   |
+| `@nikitababko/eslint-config/typescript` | `typescriptConfig()` (array) | `typescriptConfig`, `commonTsRules`, `DEFAULT_TS_FILES`        |
+| `@nikitababko/eslint-config/stylistic`  | `stylisticConfig()` (array)  | `stylisticConfig`, `stylisticRules`, `DEFAULT_STYLISTIC_FILES` |
+| `@nikitababko/eslint-config/vanilla`    | `vanillaConfig()` (array)    | `vanillaConfig`                                                |
+| `@nikitababko/eslint-config/react`      | `reactConfig()` (array)      | `reactConfig`, `reactLayer`, `DEFAULT_REACT_FILES`             |
+| `@nikitababko/eslint-config/solid`      | `solidConfig()` (array)      | `solidConfig`, `solidLayer`, `DEFAULT_SOLID_FILES`             |
 
 ---
 

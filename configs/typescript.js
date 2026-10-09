@@ -4,19 +4,12 @@ import stylistic from '@stylistic/eslint-plugin';
 import importX from 'eslint-plugin-import-x';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 
-import {
-  BOOLEAN_PREFIXES,
-  CONSOLE_METHODS,
-  MAX_STRING_LENGTH,
-  OPTIONS,
-  RULE_STATUSES,
-} from './constants.js';
+import { BOOLEAN_PREFIXES, CONSOLE_METHODS, RULE_STATUSES } from './constants.js';
 import { typescriptCompatibilityConfig } from './typescript-compatibility.js';
 
 export const commonTsRules = {
   // Base
   'no-console': [RULE_STATUSES.WARN, { allow: [CONSOLE_METHODS.WARN, CONSOLE_METHODS.ERROR] }],
-  'no-multiple-empty-lines': [RULE_STATUSES.ERROR, { max: 1, maxEOF: 0, maxBOF: 0 }],
   'no-unused-vars': RULE_STATUSES.OFF,
   'import-x/order': [
     RULE_STATUSES.ERROR,
@@ -58,25 +51,6 @@ export const commonTsRules = {
     },
   ],
 
-  // Stylistic
-  '@stylistic/arrow-parens': [RULE_STATUSES.ERROR, OPTIONS.ALWAYS],
-  '@stylistic/brace-style': [RULE_STATUSES.ERROR, '1tbs'],
-  '@stylistic/block-spacing': [RULE_STATUSES.ERROR, 'never'],
-  '@stylistic/max-len': [
-    RULE_STATUSES.ERROR,
-    {
-      code: MAX_STRING_LENGTH,
-      ignoreComments: true,
-      ignoreStrings: true,
-      ignoreTemplateLiterals: true,
-    },
-  ],
-  '@stylistic/object-curly-spacing': [RULE_STATUSES.ERROR, OPTIONS.ALWAYS],
-  '@stylistic/semi': [RULE_STATUSES.ERROR, OPTIONS.ALWAYS],
-  '@stylistic/quotes': [RULE_STATUSES.ERROR, 'single'],
-  '@stylistic/comma-dangle': [RULE_STATUSES.ERROR, 'always-multiline'],
-  '@stylistic/indent': [RULE_STATUSES.ERROR, 2],
-
   // Unicorn (naming consistency & readability)
   'unicorn/filename-case': [RULE_STATUSES.ERROR, { cases: { kebabCase: true } }],
   'unicorn/prevent-abbreviations': [
@@ -108,7 +82,7 @@ export const DEFAULT_TS_FILES = ['**/*.ts', '**/*.tsx'];
  */
 
 /**
- * TypeScript layer: TS parser + type-aware rules + stylistic + unicorn plugins.
+ * TypeScript layer: TS parser + type-aware rules + unicorn + import rules.
  *
  * @param {TypescriptConfigOptions} [options]
  */

@@ -9,8 +9,19 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Optional `stylistic` entrypoint with `stylisticConfig`, `stylisticRules`, and
+  file-scoped formatting checks. Append it after a preset to enable the package's
+  chosen style.
+
 ### Fixed
 
+- Leave formatting to Prettier in the default TypeScript, vanilla, React, and
+  Solid presets. Formatting rules have moved out of `commonTsRules` into the
+  optional stylistic layer; React's `react/jsx-newline` is no longer enabled.
+  The stylistic quotes rule accepts double quotes to avoid escaping apostrophes,
+  and single-line block spacing uses spaces.
 - Align requirements with Unicorn 63 and fresh transitive dependencies:
   Node.js `^20.19.0 || ^22.13.0 || >=24.0.0` and ESLint `^9.38.0`. Verify exact
   minimum peer versions in an isolated packed consumer on each minimum Node.js

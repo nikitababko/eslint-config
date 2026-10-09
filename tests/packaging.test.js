@@ -136,6 +136,38 @@ const runConsumerScript = (script) =>
   }).trim();
 
 describe('Packaging smoke', () => {
+  it('consumer can typecheck the packed stylistic API', async () => {
+    const sourcePath = join(consumerDir, 'stylistic-api.mts');
+    await writeFile(
+      sourcePath,
+      `import type { Linter } from 'eslint';
+      import stylistic, {
+        stylisticConfig,
+        stylisticRules,
+        DEFAULT_STYLISTIC_FILES,
+        type StylisticConfigOptions,
+      } from '@nikitababko/eslint-config/stylistic';
+
+      const options: StylisticConfigOptions = { files: DEFAULT_STYLISTIC_FILES };
+      const config: Linter.Config[] = [...stylistic, ...stylisticConfig(options)];
+      const rules: Record<string, Linter.RuleEntry> = stylisticRules;
+      `,
+    );
+
+    expect(() =>
+      run(process.execPath, [
+        join(repoRoot, 'node_modules', 'typescript', 'bin', 'tsc'),
+        '--noEmit',
+        '--strict',
+        '--module',
+        'NodeNext',
+        '--target',
+        'ES2022',
+        sourcePath,
+      ]),
+    ).not.toThrow();
+  });
+
   it('packed tarball contains exported runtime and type files', () => {
     expect(packagedFiles).toEqual(
       expect.arrayContaining([
@@ -147,6 +179,8 @@ describe('Packaging smoke', () => {
         'package/configs/base.d.ts',
         'package/configs/typescript.js',
         'package/configs/typescript.d.ts',
+        'package/configs/stylistic.js',
+        'package/configs/stylistic.d.ts',
         'package/configs/vanilla.js',
         'package/configs/vanilla.d.ts',
         'package/configs/react.js',
@@ -162,6 +196,7 @@ describe('Packaging smoke', () => {
       const root = await import('@nikitababko/eslint-config');
       const base = await import('@nikitababko/eslint-config/base');
       const typescript = await import('@nikitababko/eslint-config/typescript');
+      const stylistic = await import('@nikitababko/eslint-config/stylistic');
       const vanilla = await import('@nikitababko/eslint-config/vanilla');
       const react = await import('@nikitababko/eslint-config/react');
       const solid = await import('@nikitababko/eslint-config/solid');
@@ -173,6 +208,10 @@ describe('Packaging smoke', () => {
         hasBaseConfig: typeof base.baseConfig === 'function',
         typescriptDefaultIsArray: Array.isArray(typescript.default),
         hasTypescriptConfig: typeof typescript.typescriptConfig === 'function',
+        stylisticDefaultIsArray: Array.isArray(stylistic.default),
+        hasStylisticConfig: typeof stylistic.stylisticConfig === 'function',
+        hasStylisticRules: typeof stylistic.stylisticRules === 'object',
+        hasStylisticFiles: Array.isArray(stylistic.DEFAULT_STYLISTIC_FILES),
         vanillaDefaultIsArray: Array.isArray(vanilla.default),
         hasVanillaSubpathConfig: typeof vanilla.vanillaConfig === 'function',
         hasReactLayer: typeof react.reactLayer === 'function',
@@ -189,6 +228,10 @@ describe('Packaging smoke', () => {
       hasBaseConfig: true,
       typescriptDefaultIsArray: true,
       hasTypescriptConfig: true,
+      stylisticDefaultIsArray: true,
+      hasStylisticConfig: true,
+      hasStylisticRules: true,
+      hasStylisticFiles: true,
       vanillaDefaultIsArray: true,
       hasVanillaSubpathConfig: true,
       hasReactLayer: true,

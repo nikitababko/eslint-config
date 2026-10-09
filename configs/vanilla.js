@@ -12,7 +12,7 @@ import { typescriptConfig } from './typescript.js';
  */
 
 /**
- * Vanilla preset: base ESLint rules + TypeScript + stylistic + unicorn.
+ * Vanilla preset: base ESLint rules + TypeScript + unicorn + import rules.
  *
  * @param {VanillaConfigOptions} [options]
  */

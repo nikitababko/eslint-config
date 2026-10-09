@@ -74,7 +74,6 @@ export const reactLayer = (options = {}) => {
         'react/jsx-no-useless-fragment': [RULE_STATUSES.ERROR, { allowExpressions: true }],
         'react/react-in-jsx-scope': RULE_STATUSES.OFF,
         'react/no-multi-comp': [RULE_STATUSES.ERROR],
-        'react/jsx-newline': RULE_STATUSES.WARN,
         'react/self-closing-comp': RULE_STATUSES.ERROR,
         'react/no-array-index-key': RULE_STATUSES.ERROR,
         'react/jsx-boolean-value': RULE_STATUSES.ERROR,

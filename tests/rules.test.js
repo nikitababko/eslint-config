@@ -8,6 +8,7 @@ import * as tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 
 import { commonTsRules } from '../configs/typescript.js';
+import { stylisticRules } from '../configs/stylistic.js';
 import { MAX_STRING_LENGTH } from '../configs/constants.js';
 
 let linter;
@@ -61,7 +62,7 @@ describe('no-console', () => {
 // ─── no-multiple-empty-lines ──────────────────────────────────────────────────
 
 describe('no-multiple-empty-lines', () => {
-  const rule = { 'no-multiple-empty-lines': commonTsRules['no-multiple-empty-lines'] };
+  const rule = { 'no-multiple-empty-lines': stylisticRules['no-multiple-empty-lines'] };
 
   it('errors on two consecutive empty lines', () => {
     expect(hasRule(lint('const x = 1;\n\n\nconst y = 2;', rule), 'no-multiple-empty-lines')).toBe(
@@ -101,7 +102,7 @@ describe('import-x/order', () => {
 // ─── @stylistic/semi ──────────────────────────────────────────────────────────
 
 describe('@stylistic/semi', () => {
-  const rule = { '@stylistic/semi': commonTsRules['@stylistic/semi'] };
+  const rule = { '@stylistic/semi': stylisticRules['@stylistic/semi'] };
   const plugins = { '@stylistic': stylistic };
 
   it('errors on missing semicolon', () => {
@@ -116,7 +117,7 @@ describe('@stylistic/semi', () => {
 // ─── @stylistic/quotes ────────────────────────────────────────────────────────
 
 describe('@stylistic/quotes', () => {
-  const rule = { '@stylistic/quotes': commonTsRules['@stylistic/quotes'] };
+  const rule = { '@stylistic/quotes': stylisticRules['@stylistic/quotes'] };
   const plugins = { '@stylistic': stylistic };
 
   it('errors on double quotes', () => {
@@ -126,12 +127,16 @@ describe('@stylistic/quotes', () => {
   it('allows single quotes', () => {
     expect(hasRule(lint("const x = 'hello';", rule, plugins), '@stylistic/quotes')).toBe(false);
   });
+
+  it('allows double quotes to avoid escaping apostrophes', () => {
+    expect(hasRule(lint('const text = "don\'t";', rule, plugins), '@stylistic/quotes')).toBe(false);
+  });
 });
 
 // ─── @stylistic/arrow-parens ──────────────────────────────────────────────────
 
 describe('@stylistic/arrow-parens', () => {
-  const rule = { '@stylistic/arrow-parens': commonTsRules['@stylistic/arrow-parens'] };
+  const rule = { '@stylistic/arrow-parens': stylisticRules['@stylistic/arrow-parens'] };
   const plugins = { '@stylistic': stylistic };
 
   it('errors on arrow function without parens', () => {
@@ -150,7 +155,7 @@ describe('@stylistic/arrow-parens', () => {
 // ─── @stylistic/brace-style ───────────────────────────────────────────────────
 
 describe('@stylistic/brace-style', () => {
-  const rule = { '@stylistic/brace-style': commonTsRules['@stylistic/brace-style'] };
+  const rule = { '@stylistic/brace-style': stylisticRules['@stylistic/brace-style'] };
   const plugins = { '@stylistic': stylistic };
 
   it('errors on Allman style (brace on new line)', () => {
@@ -167,26 +172,26 @@ describe('@stylistic/brace-style', () => {
 // ─── @stylistic/block-spacing ─────────────────────────────────────────────────
 
 describe('@stylistic/block-spacing', () => {
-  const rule = { '@stylistic/block-spacing': commonTsRules['@stylistic/block-spacing'] };
+  const rule = { '@stylistic/block-spacing': stylisticRules['@stylistic/block-spacing'] };
   const plugins = { '@stylistic': stylistic };
 
-  it('errors on spaces inside single-line block', () => {
+  it('allows spaces inside single-line block', () => {
     expect(
       hasRule(lint('function foo() { return 1; }', rule, plugins), '@stylistic/block-spacing'),
-    ).toBe(true);
+    ).toBe(false);
   });
 
-  it('allows no spaces inside single-line block', () => {
+  it('errors on no spaces inside single-line block', () => {
     expect(
       hasRule(lint('function foo() {return 1;}', rule, plugins), '@stylistic/block-spacing'),
-    ).toBe(false);
+    ).toBe(true);
   });
 });
 
 // ─── @stylistic/max-len ───────────────────────────────────────────────────────
 
 describe('@stylistic/max-len', () => {
-  const rule = { '@stylistic/max-len': commonTsRules['@stylistic/max-len'] };
+  const rule = { '@stylistic/max-len': stylisticRules['@stylistic/max-len'] };
   const plugins = { '@stylistic': stylistic };
 
   it(`errors on line exceeding ${MAX_STRING_LENGTH} characters`, () => {
@@ -212,7 +217,7 @@ describe('@stylistic/max-len', () => {
 
 describe('@stylistic/object-curly-spacing', () => {
   const rule = {
-    '@stylistic/object-curly-spacing': commonTsRules['@stylistic/object-curly-spacing'],
+    '@stylistic/object-curly-spacing': stylisticRules['@stylistic/object-curly-spacing'],
   };
   const plugins = { '@stylistic': stylistic };
 
@@ -232,7 +237,7 @@ describe('@stylistic/object-curly-spacing', () => {
 // ─── @stylistic/comma-dangle ──────────────────────────────────────────────────
 
 describe('@stylistic/comma-dangle', () => {
-  const rule = { '@stylistic/comma-dangle': commonTsRules['@stylistic/comma-dangle'] };
+  const rule = { '@stylistic/comma-dangle': stylisticRules['@stylistic/comma-dangle'] };
   const plugins = { '@stylistic': stylistic };
 
   it('errors on missing trailing comma in multiline object', () => {
@@ -249,7 +254,7 @@ describe('@stylistic/comma-dangle', () => {
 // ─── @stylistic/indent ────────────────────────────────────────────────────────
 
 describe('@stylistic/indent', () => {
-  const rule = { '@stylistic/indent': commonTsRules['@stylistic/indent'] };
+  const rule = { '@stylistic/indent': stylisticRules['@stylistic/indent'] };
   const plugins = { '@stylistic': stylistic };
 
   it('errors on 4-space indentation', () => {

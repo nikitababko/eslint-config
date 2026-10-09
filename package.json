@@ -17,6 +17,10 @@
       "types": "./configs/typescript.d.ts",
       "default": "./configs/typescript.js"
     },
+    "./stylistic": {
+      "types": "./configs/stylistic.d.ts",
+      "default": "./configs/stylistic.js"
+    },
     "./vanilla": {
       "types": "./configs/vanilla.d.ts",
       "default": "./configs/vanilla.js"
