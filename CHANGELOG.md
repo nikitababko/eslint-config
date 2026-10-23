@@ -17,6 +17,9 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- Extract GitHub release notes with a tested script that supports bracketed
+  version headings, preserves subsections, and reads the final release through
+  the end of the changelog.
 - Leave formatting to Prettier in the default TypeScript, vanilla, React, and
   Solid presets. Formatting rules have moved out of `commonTsRules` into the
   optional stylistic layer; React's `react/jsx-newline` is no longer enabled.

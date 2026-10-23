@@ -101,29 +101,7 @@ jobs:
 
       # Extract release notes from CHANGELOG.md for the current tag
       - name: Generate release notes from CHANGELOG
-        run: |
-          node << 'EOF'
-          const fs = require('fs');
-
-          const tag = process.env.GITHUB_REF_NAME;
-          const version = tag.replace(/^v/, '');
-
-          const changelog = fs.readFileSync('CHANGELOG.md', 'utf8');
-
-          const regex = new RegExp(
-            `^#{2,3}\\s+v?${version}[^\\n]*\\n([\\s\\S]*?)(?=^#{2,3}\\s+v?|\\Z)`,
-            'm'
-          );
-
-          const match = changelog.match(regex);
-
-          if (!match) {
-            console.error(`Could not find section for version ${version} in CHANGELOG.md`);
-            process.exit(1);
-          }
-
-          fs.writeFileSync('release-notes.md', match[0]);
-          EOF
+        run: node scripts/extract-release-notes.js
 
       - name: Create Release
         uses: softprops/action-gh-release@v2

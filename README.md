@@ -761,6 +761,11 @@ Please open an issue first for significant changes to discuss the approach.
 
 [Open an issue →](https://github.com/nikitababko/eslint-config/issues)
 
+To preview release notes locally, run `node scripts/extract-release-notes.js v0.1.0`.
+The script reads `CHANGELOG.md` and writes the matching section, including its
+heading and subsections, to `release-notes.md`. In the release workflow, the version
+comes from `GITHUB_REF_NAME`. A missing version or section fails the command.
+
 ---
 
 ## License
