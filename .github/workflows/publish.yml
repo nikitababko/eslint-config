@@ -7,15 +7,24 @@ on:
 
 permissions:
   contents: read
-  id-token: write
 
 jobs:
   checks:
     uses: ./.github/workflows/ci.yml
 
+  validate-release:
+    name: Validate release metadata
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node scripts/validate-release.js
+
   publish-npm:
     name: Publish to npmjs
-    needs: checks
+    needs: [checks, validate-release]
     runs-on: ubuntu-latest
     permissions:
       contents: read

@@ -17,6 +17,9 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- Require example lint alongside the existing CI checks before publishing. Check
+  that the release tag matches `package.json` and has non-empty release notes
+  before either registry receives the package.
 - Extract GitHub release notes with a tested script that supports bracketed
   version headings, preserves subsections, and reads the final release through
   the end of the changelog.

@@ -123,10 +123,12 @@
   "scripts": {
     "commit": "cz",
     "examples:build": "pnpm -r --filter \"example-*\" build",
+    "examples:lint": "pnpm -r --filter \"example-*\" lint",
     "lint": "eslint .",
     "lint:check": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "release:check": "node scripts/validate-release.js",
     "typecheck": "pnpm exec tsc -p tsconfig.typecheck.json",
     "test": "pnpm test:unit && pnpm examples:build",
     "test:minimum": "node scripts/test-minimum-versions.js",

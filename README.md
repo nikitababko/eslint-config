@@ -746,6 +746,7 @@ Contributions, bug reports, and feature requests are welcome.
 4. Run the full verification flow:
    - `pnpm test` - unit tests plus example build smoke
    - `pnpm lint:check`
+   - `pnpm examples:lint` - lint every example with its own ESLint configuration
    - `pnpm typecheck`
    - `pnpm format:check`
 5. Helpful individual commands:
@@ -765,6 +766,14 @@ To preview release notes locally, run `node scripts/extract-release-notes.js v0.
 The script reads `CHANGELOG.md` and writes the matching section, including its
 heading and subsections, to `release-notes.md`. In the release workflow, the version
 comes from `GITHUB_REF_NAME`. A missing version or section fails the command.
+
+CI runs on branch pushes and pull requests. It checks tests, example builds and
+lint, root lint, types, formatting, and minimum supported dependency versions.
+Tag pushes matching `v*` rerun this CI before publishing to either registry.
+They also run `node scripts/validate-release.js`, which requires the tag to equal
+`v<package.json version>` and a non-empty release section in `CHANGELOG.md`.
+Any failed check prevents publication and GitHub Release creation.
+To check release metadata locally, run `pnpm release:check v0.1.0`.
 
 ---
 
