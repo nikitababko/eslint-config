@@ -29,6 +29,7 @@ Built on top of:
   - [SolidJS](#solidjs)
   - [Base (JS only)](#base)
   - [TypeScript layer](#typescript-layer)
+  - [Linting without type information](#linting-without-type-information)
   - [Stylistic layer (optional)](#stylistic-layer)
 - [Configuration Options](#configuration-options)
 - [Key Rules](#key-rules)
@@ -46,7 +47,7 @@ Built on top of:
 - **ESLint v9 Flat Config** — no legacy `.eslintrc` format
 - **Prettier-compatible** — default presets leave formatting to Prettier;
   stricter formatting checks are available in an optional stylistic layer
-- **Type-aware linting** — powered by `@typescript-eslint` with full project-aware rules
+- **Type-aware linting** — enabled by default; use `isTypeAware: false` to lint without a TypeScript project
 - **Opinionated but escapable** — sensible defaults, easy to override per rule
 - **Modular layered architecture** — compose presets from smaller building blocks
 - **Monorepo-ready** — custom `tsconfigPath` and `tsconfigRootDir` per layer
@@ -338,6 +339,47 @@ export default [
 
 ---
 
+### Linting without type information
+
+Type-aware linting is enabled by default. Set `isTypeAware: false` to lint small
+projects without a `tsconfig.json`, or files outside a TypeScript project:
+
+```js
+import { vanillaConfig } from '@nikitababko/eslint-config/vanilla';
+
+export default vanillaConfig({ isTypeAware: false });
+```
+
+The option is available in `typescriptConfig`, `vanillaConfig`, `reactConfig`,
+`solidConfig`, `reactLayer`, and `solidLayer`. The React and Solid presets pass it
+to both their TypeScript and framework layers.
+
+This mode disables TypeScript project services and all typescript-eslint rules
+that require type information, using the plugin's
+[`disable-type-checked` configuration](https://typescript-eslint.io/users/configs/#disable-type-checked).
+This includes `no-floating-promises`, `no-misused-promises`, and the Boolean
+prefix checks in `naming-convention`. Syntax-based rules, import ordering,
+Unicorn, and framework checks remain enabled. `tsconfigPath` is not read in this
+mode. Run `tsc --noEmit` separately when you need compiler checks.
+
+To keep type-aware checks for source files while linting scripts outside the
+project, append a layer scoped to those scripts:
+
+```js
+import { vanillaConfig } from '@nikitababko/eslint-config/vanilla';
+import { typescriptConfig } from '@nikitababko/eslint-config/typescript';
+
+export default [
+  ...vanillaConfig(),
+  ...typescriptConfig({
+    files: ['scripts/**/*.{ts,mts,cts}'],
+    isTypeAware: false,
+  }),
+];
+```
+
+---
+
 ### Stylistic layer
 
 Optional formatting checks for projects that want ESLint to enforce the package's
@@ -381,11 +423,12 @@ All factory functions accept an options object. All options are optional.
 
 ### `typescriptConfig(options)`
 
-| Option            | Type       | Default                                           | Description                           |
-| ----------------- | ---------- | ------------------------------------------------- | ------------------------------------- |
-| `files`           | `string[]` | `['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']` | File patterns to lint with this layer |
-| `tsconfigPath`    | `string`   | `'./tsconfig.json'`                               | Path to `tsconfig.json`               |
-| `tsconfigRootDir` | `string`   | `process.cwd()`                                   | Root dir for tsconfig resolution      |
+| Option            | Type       | Default                                           | Description                                             |
+| ----------------- | ---------- | ------------------------------------------------- | ------------------------------------------------------- |
+| `files`           | `string[]` | `['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']` | File patterns to lint with this layer                   |
+| `isTypeAware`     | `boolean`  | `true`                                            | Enable type-aware rules and TypeScript project services |
+| `tsconfigPath`    | `string`   | `'./tsconfig.json'`                               | Path to `tsconfig.json`                                 |
+| `tsconfigRootDir` | `string`   | `process.cwd()`                                   | Root dir for tsconfig resolution                        |
 
 ### `stylisticConfig(options)`
 
@@ -403,6 +446,7 @@ Accepts all `baseConfig` options and all `typescriptConfig` options, with `files
 | `environment`     | `'neutral' \| 'browser' \| 'node' \| 'universal'` | `'browser'`                                       | Passed to `baseConfig`                  |
 | `globalsPreset`   | `object`                                          | See `baseConfig`                                  | Passed to `baseConfig`                  |
 | `tsFiles`         | `string[]`                                        | `['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']` | Passed as `files` to `typescriptConfig` |
+| `isTypeAware`     | `boolean`                                         | `true`                                            | Passed to `typescriptConfig`            |
 | `tsconfigPath`    | `string`                                          | `'./tsconfig.json'`                               | Passed to `typescriptConfig`            |
 | `tsconfigRootDir` | `string`                                          | `process.cwd()`                                   | Passed to `typescriptConfig`            |
 
@@ -413,9 +457,14 @@ Accepts all `vanillaConfig` options plus:
 | Option            | Type                 | Default                   | Description                             |
 | ----------------- | -------------------- | ------------------------- | --------------------------------------- |
 | `files`           | `string[]`           | `['**/*.tsx']`            | File patterns for the React/Solid layer |
+| `isTypeAware`     | `boolean`            | `true`                    | Passed to both vanilla and the layer    |
 | `tsconfigPath`    | `string`             | `'./tsconfig.json'`       | Passed to both vanilla and the layer    |
 | `tsconfigRootDir` | `string`             | `process.cwd()`           | Passed to both vanilla and the layer    |
 | `ecmaVersion`     | `number \| 'latest'` | `'latest'` _(React only)_ | ECMAScript version for the parser       |
+
+The standalone `reactLayer` and `solidLayer` factories accept `files`,
+`isTypeAware`, `tsconfigPath`, and `tsconfigRootDir` with the same defaults.
+`reactLayer` also accepts `ecmaVersion`.
 
 ---
 
@@ -662,6 +711,9 @@ Or use a separate `tsconfig.eslint.json` that includes all files:
 }
 ```
 
+For files that do not need type-aware rules, use
+[`isTypeAware: false`](#linting-without-type-information) instead.
+
 ---
 
 ### ESLint is very slow
@@ -677,6 +729,10 @@ export default typescriptConfig({
   files: ['src/**/*.ts'], // only lint source, not tests/scripts
 });
 ```
+
+Or set `isTypeAware: false` to skip type-aware linting altogether. See
+[linting without type information](#linting-without-type-information) to keep
+syntax-based checks for scripts outside the project.
 
 ---
 

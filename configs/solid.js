@@ -13,8 +13,16 @@ export { solidLayer, DEFAULT_SOLID_FILES } from './solid-layer.js';
  * @param {SolidConfigOptions} [options]
  */
 export const solidConfig = (options = {}) => {
-  const { ignores, environment, globalsPreset, tsFiles, tsconfigPath, tsconfigRootDir, files } =
-    options;
+  const {
+    ignores,
+    environment,
+    globalsPreset,
+    tsFiles,
+    isTypeAware,
+    tsconfigPath,
+    tsconfigRootDir,
+    files,
+  } = options;
 
   return [
     ...vanillaConfig({
@@ -22,10 +30,11 @@ export const solidConfig = (options = {}) => {
       environment,
       globalsPreset,
       tsFiles,
+      isTypeAware,
       tsconfigPath,
       tsconfigRootDir,
     }),
-    ...solidLayer({ files, tsconfigPath, tsconfigRootDir }),
+    ...solidLayer({ files, isTypeAware, tsconfigPath, tsconfigRootDir }),
   ];
 };
 

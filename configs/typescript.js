@@ -6,6 +6,7 @@ import tsPlugin from '@typescript-eslint/eslint-plugin';
 
 import { BOOLEAN_PREFIXES, CONSOLE_METHODS, RULE_STATUSES } from './constants.js';
 import { typescriptCompatibilityConfig } from './typescript-compatibility.js';
+import { disableTypeCheckingConfig } from './typescript-type-checking.js';
 
 export const commonTsRules = {
   // Base
@@ -77,6 +78,7 @@ export const DEFAULT_TS_FILES = ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'];
 /**
  * @typedef {Object} TypescriptConfigOptions
  * @property {string[]} [files] - File patterns to lint with this layer. Default: `['**\/*.ts', '**\/*.tsx', '**\/*.mts', '**\/*.cts']`.
+ * @property {boolean} [isTypeAware] - Enable type-aware linting. Default: `true`.
  * @property {string} [tsconfigPath] - Path to tsconfig.json. Default: `'./tsconfig.json'`.
  * @property {string} [tsconfigRootDir] - Root dir for tsconfig resolution. Default: `process.cwd()`.
  */
@@ -89,6 +91,7 @@ export const DEFAULT_TS_FILES = ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'];
 export const typescriptConfig = (options = {}) => {
   const {
     files = DEFAULT_TS_FILES,
+    isTypeAware = true,
     tsconfigPath = './tsconfig.json',
     tsconfigRootDir = process.cwd(),
   } = options;
@@ -116,6 +119,7 @@ export const typescriptConfig = (options = {}) => {
       },
     },
     typescriptCompatibilityConfig(files),
+    ...(isTypeAware ? [] : [disableTypeCheckingConfig(files)]),
   ];
 };
 

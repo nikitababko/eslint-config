@@ -10,12 +10,14 @@ import importX from 'eslint-plugin-import-x';
 import { commonTsRules } from './typescript.js';
 import { RULE_STATUSES } from './constants.js';
 import { typescriptCompatibilityConfig } from './typescript-compatibility.js';
+import { disableTypeCheckingConfig } from './typescript-type-checking.js';
 
 export const DEFAULT_REACT_FILES = ['**/*.tsx'];
 
 /**
  * @typedef {Object} ReactLayerOptions
  * @property {string[]} [files] - File patterns to lint. Default: `['**\/*.tsx']`.
+ * @property {boolean} [isTypeAware] - Enable type-aware linting. Default: `true`.
  * @property {string} [tsconfigPath] - Path to tsconfig.json. Default: `'./tsconfig.json'`.
  * @property {string} [tsconfigRootDir] - Root dir for tsconfig resolution. Default: `process.cwd()`.
  * @property {number | 'latest'} [ecmaVersion] - ECMAScript version. Default: `'latest'`.
@@ -27,6 +29,7 @@ export const DEFAULT_REACT_FILES = ['**/*.tsx'];
 export const reactLayer = (options = {}) => {
   const {
     files = DEFAULT_REACT_FILES,
+    isTypeAware = true,
     tsconfigPath = './tsconfig.json',
     tsconfigRootDir = process.cwd(),
     ecmaVersion = 'latest',
@@ -86,6 +89,7 @@ export const reactLayer = (options = {}) => {
       },
     },
     typescriptCompatibilityConfig(files),
+    ...(isTypeAware ? [] : [disableTypeCheckingConfig(files)]),
   ];
 };
 

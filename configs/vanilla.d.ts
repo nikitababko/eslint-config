@@ -5,6 +5,7 @@ import type { TypescriptConfigOptions } from './typescript.js';
 
 export interface VanillaConfigOptions extends BaseConfigOptions {
   tsFiles?: TypescriptConfigOptions['files'];
+  isTypeAware?: TypescriptConfigOptions['isTypeAware'];
   tsconfigPath?: TypescriptConfigOptions['tsconfigPath'];
   tsconfigRootDir?: TypescriptConfigOptions['tsconfigRootDir'];
 }

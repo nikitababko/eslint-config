@@ -5,6 +5,7 @@ export declare const DEFAULT_TS_FILES: string[];
 
 export interface TypescriptConfigOptions {
   files?: string[];
+  isTypeAware?: boolean;
   tsconfigPath?: string;
   tsconfigRootDir?: string;
 }

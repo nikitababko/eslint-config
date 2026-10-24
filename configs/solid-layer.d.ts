@@ -4,6 +4,7 @@ export declare const DEFAULT_SOLID_FILES: string[];
 
 export interface SolidLayerOptions {
   files?: string[];
+  isTypeAware?: boolean;
   tsconfigPath?: string;
   tsconfigRootDir?: string;
 }

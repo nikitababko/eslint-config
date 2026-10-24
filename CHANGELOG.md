@@ -11,6 +11,9 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Optional `isTypeAware: false` mode in TypeScript, vanilla, React, and Solid
+  factories and framework layers. Lint files without a `tsconfig.json` or outside
+  its project while retaining syntax-based and framework rules.
 - Default `.mts` and `.cts` support in the TypeScript layer, the vanilla, React,
   and Solid presets, and the optional stylistic layer.
 - Optional `stylistic` entrypoint with `stylisticConfig`, `stylisticRules`, and

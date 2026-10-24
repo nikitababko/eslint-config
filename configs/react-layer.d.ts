@@ -4,6 +4,7 @@ export declare const DEFAULT_REACT_FILES: string[];
 
 export interface ReactLayerOptions {
   files?: string[];
+  isTypeAware?: boolean;
   tsconfigPath?: string;
   tsconfigRootDir?: string;
   ecmaVersion?: number | 'latest';

@@ -18,6 +18,7 @@ export const reactConfig = (options = {}) => {
     environment,
     globalsPreset,
     tsFiles,
+    isTypeAware,
     tsconfigPath,
     tsconfigRootDir,
     files,
@@ -30,10 +31,11 @@ export const reactConfig = (options = {}) => {
       environment,
       globalsPreset,
       tsFiles,
+      isTypeAware,
       tsconfigPath,
       tsconfigRootDir,
     }),
-    ...reactLayer({ files, tsconfigPath, tsconfigRootDir, ecmaVersion }),
+    ...reactLayer({ files, isTypeAware, tsconfigPath, tsconfigRootDir, ecmaVersion }),
   ];
 };
 

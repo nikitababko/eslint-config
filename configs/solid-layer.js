@@ -8,12 +8,14 @@ import importX from 'eslint-plugin-import-x';
 import { commonTsRules } from './typescript.js';
 import { RULE_STATUSES } from './constants.js';
 import { typescriptCompatibilityConfig } from './typescript-compatibility.js';
+import { disableTypeCheckingConfig } from './typescript-type-checking.js';
 
 export const DEFAULT_SOLID_FILES = ['**/*.tsx'];
 
 /**
  * @typedef {Object} SolidLayerOptions
  * @property {string[]} [files] - File patterns to lint. Default: `['**\/*.tsx']`.
+ * @property {boolean} [isTypeAware] - Enable type-aware linting. Default: `true`.
  * @property {string} [tsconfigPath] - Path to tsconfig.json. Default: `'./tsconfig.json'`.
  * @property {string} [tsconfigRootDir] - Root dir for tsconfig resolution. Default: `process.cwd()`.
  */
@@ -24,6 +26,7 @@ export const DEFAULT_SOLID_FILES = ['**/*.tsx'];
 export const solidLayer = (options = {}) => {
   const {
     files = DEFAULT_SOLID_FILES,
+    isTypeAware = true,
     tsconfigPath = './tsconfig.json',
     tsconfigRootDir = process.cwd(),
   } = options;
@@ -67,6 +70,7 @@ export const solidLayer = (options = {}) => {
       },
     },
     typescriptCompatibilityConfig(files),
+    ...(isTypeAware ? [] : [disableTypeCheckingConfig(files)]),
   ];
 };
 

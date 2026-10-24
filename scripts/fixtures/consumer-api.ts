@@ -64,16 +64,22 @@ const presets: Linter.Config[][] = [
   baseConfig(baseOptions),
   typescript,
   typescriptConfig(typescriptOptions),
+  typescriptConfig({ isTypeAware: false }),
   stylistic,
   stylisticConfig(stylisticOptions),
   vanilla,
   vanillaConfig(vanillaOptions),
+  vanillaConfig({ isTypeAware: false }),
   react,
   reactConfig(reactOptions),
+  reactConfig({ isTypeAware: false }),
   reactLayer(reactOptions),
+  reactLayer({ isTypeAware: false }),
   solid,
   solidConfig(solidOptions),
+  solidConfig({ isTypeAware: false }),
   solidLayer(solidOptions),
+  solidLayer({ isTypeAware: false }),
 ];
 const rules: Record<string, Linter.RuleEntry>[] = [commonTsRules, stylisticRules];
 

@@ -7,6 +7,7 @@ import { typescriptConfig } from './typescript.js';
  * @property {'neutral' | 'browser' | 'node' | 'universal'} [environment] - Runtime environment. Default: `'browser'`.
  * @property {Record<string, boolean>} [globalsPreset] - Global variables. Overrides `environment`.
  * @property {string[]} [tsFiles] - TypeScript layer file patterns. Default: `['**\/*.ts', '**\/*.tsx', '**\/*.mts', '**\/*.cts']`.
+ * @property {boolean} [isTypeAware] - Enable type-aware linting. Default: `true`.
  * @property {string} [tsconfigPath] - Path to tsconfig.json. Default: `'./tsconfig.json'`.
  * @property {string} [tsconfigRootDir] - Root dir for tsconfig resolution. Default: `process.cwd()`.
  */
@@ -22,13 +23,14 @@ export const vanillaConfig = (options = {}) => {
     environment = 'browser',
     globalsPreset,
     tsFiles,
+    isTypeAware,
     tsconfigPath,
     tsconfigRootDir,
   } = options;
 
   return [
     ...baseConfig({ ignores, environment, globalsPreset }),
-    ...typescriptConfig({ files: tsFiles, tsconfigPath, tsconfigRootDir }),
+    ...typescriptConfig({ files: tsFiles, isTypeAware, tsconfigPath, tsconfigRootDir }),
   ];
 };
 
