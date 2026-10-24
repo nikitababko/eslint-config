@@ -11,6 +11,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Default `.mts` and `.cts` support in the TypeScript layer, the vanilla, React,
+  and Solid presets, and the optional stylistic layer.
 - Optional `stylistic` entrypoint with `stylisticConfig`, `stylisticRules`, and
   file-scoped formatting checks. Append it after a preset to enable the package's
   chosen style.

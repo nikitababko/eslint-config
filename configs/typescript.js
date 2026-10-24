@@ -72,11 +72,11 @@ export const commonTsRules = {
   'unicorn/consistent-function-scoping': RULE_STATUSES.OFF,
 };
 
-export const DEFAULT_TS_FILES = ['**/*.ts', '**/*.tsx'];
+export const DEFAULT_TS_FILES = ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'];
 
 /**
  * @typedef {Object} TypescriptConfigOptions
- * @property {string[]} [files] - File patterns to lint with this layer. Default: `['**\/*.ts', '**\/*.tsx']`.
+ * @property {string[]} [files] - File patterns to lint with this layer. Default: `['**\/*.ts', '**\/*.tsx', '**\/*.mts', '**\/*.cts']`.
  * @property {string} [tsconfigPath] - Path to tsconfig.json. Default: `'./tsconfig.json'`.
  * @property {string} [tsconfigRootDir] - Root dir for tsconfig resolution. Default: `process.cwd()`.
  */

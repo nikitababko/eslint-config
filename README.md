@@ -141,6 +141,11 @@ npx eslint .
 
 **Default preset** — TypeScript + unicorn + import rules. Best for framework-agnostic TypeScript projects.
 
+The TypeScript layer selects `.ts`, `.tsx`, `.mts`, and `.cts` files by default,
+including when inherited by the React and Solid presets. Include these files in
+your `tsconfig.json` for type-aware linting. The framework-specific layers still
+select `.tsx` files by default.
+
 ```js
 // eslint.config.js
 import vanilla from '@nikitababko/eslint-config/vanilla';
@@ -348,6 +353,7 @@ export default [...vanilla, ...stylistic];
 To limit checks to specific files, use `stylisticConfig({ files: ['src/**/*.ts'] })`.
 The layer supplies formatting rules and the Stylistic plugin; the preceding preset
 supplies the parser and language rules.
+Its default file patterns cover JavaScript and TypeScript, including `.mts` and `.cts`.
 
 Default presets no longer enable these formatting rules, including
 `no-multiple-empty-lines`, and `commonTsRules` contains only the shared language
@@ -375,30 +381,30 @@ All factory functions accept an options object. All options are optional.
 
 ### `typescriptConfig(options)`
 
-| Option            | Type       | Default                   | Description                           |
-| ----------------- | ---------- | ------------------------- | ------------------------------------- |
-| `files`           | `string[]` | `['**/*.ts', '**/*.tsx']` | File patterns to lint with this layer |
-| `tsconfigPath`    | `string`   | `'./tsconfig.json'`       | Path to `tsconfig.json`               |
-| `tsconfigRootDir` | `string`   | `process.cwd()`           | Root dir for tsconfig resolution      |
+| Option            | Type       | Default                                           | Description                           |
+| ----------------- | ---------- | ------------------------------------------------- | ------------------------------------- |
+| `files`           | `string[]` | `['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']` | File patterns to lint with this layer |
+| `tsconfigPath`    | `string`   | `'./tsconfig.json'`                               | Path to `tsconfig.json`               |
+| `tsconfigRootDir` | `string`   | `process.cwd()`                                   | Root dir for tsconfig resolution      |
 
 ### `stylisticConfig(options)`
 
-| Option  | Type       | Default                            | Description                                  |
-| ------- | ---------- | ---------------------------------- | -------------------------------------------- |
-| `files` | `string[]` | `['**/*.{js,jsx,mjs,cjs,ts,tsx}']` | File patterns for optional formatting checks |
+| Option  | Type       | Default                                    | Description                                  |
+| ------- | ---------- | ------------------------------------------ | -------------------------------------------- |
+| `files` | `string[]` | `['**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}']` | File patterns for optional formatting checks |
 
 ### `vanillaConfig(options)`
 
 Accepts all `baseConfig` options and all `typescriptConfig` options, with `files` renamed to `tsFiles`.
 
-| Option            | Type                                              | Default                   | Description                             |
-| ----------------- | ------------------------------------------------- | ------------------------- | --------------------------------------- |
-| `ignores`         | `string[]`                                        | See `baseConfig`          | Passed to `baseConfig`                  |
-| `environment`     | `'neutral' \| 'browser' \| 'node' \| 'universal'` | `'browser'`               | Passed to `baseConfig`                  |
-| `globalsPreset`   | `object`                                          | See `baseConfig`          | Passed to `baseConfig`                  |
-| `tsFiles`         | `string[]`                                        | `['**/*.ts', '**/*.tsx']` | Passed as `files` to `typescriptConfig` |
-| `tsconfigPath`    | `string`                                          | `'./tsconfig.json'`       | Passed to `typescriptConfig`            |
-| `tsconfigRootDir` | `string`                                          | `process.cwd()`           | Passed to `typescriptConfig`            |
+| Option            | Type                                              | Default                                           | Description                             |
+| ----------------- | ------------------------------------------------- | ------------------------------------------------- | --------------------------------------- |
+| `ignores`         | `string[]`                                        | See `baseConfig`                                  | Passed to `baseConfig`                  |
+| `environment`     | `'neutral' \| 'browser' \| 'node' \| 'universal'` | `'browser'`                                       | Passed to `baseConfig`                  |
+| `globalsPreset`   | `object`                                          | See `baseConfig`                                  | Passed to `baseConfig`                  |
+| `tsFiles`         | `string[]`                                        | `['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']` | Passed as `files` to `typescriptConfig` |
+| `tsconfigPath`    | `string`                                          | `'./tsconfig.json'`                               | Passed to `typescriptConfig`            |
+| `tsconfigRootDir` | `string`                                          | `process.cwd()`                                   | Passed to `typescriptConfig`            |
 
 ### `reactConfig(options)` / `solidConfig(options)`
 
@@ -652,7 +658,7 @@ Or use a separate `tsconfig.eslint.json` that includes all files:
 ```json
 {
   "extends": "./tsconfig.json",
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts", "**/*.js", "**/*.jsx"]
 }
 ```
 

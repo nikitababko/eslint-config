@@ -23,7 +23,7 @@ export const stylisticRules = {
   '@stylistic/indent': [RULE_STATUSES.ERROR, 2],
 };
 
-export const DEFAULT_STYLISTIC_FILES = ['**/*.{js,jsx,mjs,cjs,ts,tsx}'];
+export const DEFAULT_STYLISTIC_FILES = ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}'];
 
 /**
  * @typedef {Object} StylisticConfigOptions

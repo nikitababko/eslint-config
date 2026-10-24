@@ -6,7 +6,7 @@ import { typescriptConfig } from './typescript.js';
  * @property {string[]} [ignores] - Glob patterns to ignore. Default: `DEFAULT_IGNORES`.
  * @property {'neutral' | 'browser' | 'node' | 'universal'} [environment] - Runtime environment. Default: `'browser'`.
  * @property {Record<string, boolean>} [globalsPreset] - Global variables. Overrides `environment`.
- * @property {string[]} [tsFiles] - TypeScript layer file patterns. Default: `['**\/*.ts', '**\/*.tsx']`.
+ * @property {string[]} [tsFiles] - TypeScript layer file patterns. Default: `['**\/*.ts', '**\/*.tsx', '**\/*.mts', '**\/*.cts']`.
  * @property {string} [tsconfigPath] - Path to tsconfig.json. Default: `'./tsconfig.json'`.
  * @property {string} [tsconfigRootDir] - Root dir for tsconfig resolution. Default: `process.cwd()`.
  */
