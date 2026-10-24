@@ -79,6 +79,7 @@ export const DEFAULT_TS_FILES = ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'];
  * @typedef {Object} TypescriptConfigOptions
  * @property {string[]} [files] - File patterns to lint with this layer. Default: `['**\/*.ts', '**\/*.tsx', '**\/*.mts', '**\/*.cts']`.
  * @property {boolean} [isTypeAware] - Enable type-aware linting. Default: `true`.
+ * @property {import('@typescript-eslint/parser').ParserOptions['projectService']} [projectService] - Use the nearest tsconfig.json instead of tsconfigPath. Default: `false`.
  * @property {string} [tsconfigPath] - Path to tsconfig.json. Default: `'./tsconfig.json'`.
  * @property {string} [tsconfigRootDir] - Root dir for tsconfig resolution. Default: `process.cwd()`.
  */
@@ -92,6 +93,7 @@ export const typescriptConfig = (options = {}) => {
   const {
     files = DEFAULT_TS_FILES,
     isTypeAware = true,
+    projectService = false,
     tsconfigPath = './tsconfig.json',
     tsconfigRootDir = process.cwd(),
   } = options;
@@ -103,7 +105,8 @@ export const typescriptConfig = (options = {}) => {
         parser: tsParser,
         parserOptions: {
           sourceType: 'module',
-          project: tsconfigPath,
+          project: projectService ? false : tsconfigPath,
+          projectService,
           tsconfigRootDir,
           ecmaFeatures: { jsx: true },
         },

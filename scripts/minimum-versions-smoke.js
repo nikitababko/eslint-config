@@ -58,3 +58,25 @@ for (const [subpath, file] of presets) {
   }
   console.log(`Passed ${name} on Node.js ${process.versions.node}, ESLint ${ESLint.version}`);
 }
+
+for (const [subpath, factory, file] of [
+  ['/typescript', 'typescriptConfig', 'sample.ts'],
+  ['/vanilla', 'vanillaConfig', 'sample.ts'],
+  ['/react', 'reactConfig', 'component.tsx'],
+  ['/react', 'reactLayer', 'component.tsx'],
+  ['/solid', 'solidConfig', 'component.tsx'],
+  ['/solid', 'solidLayer', 'component.tsx'],
+]) {
+  const { [factory]: createConfig } = await import(`@nikitababko/eslint-config${subpath}`);
+  const eslint = new ESLint({
+    overrideConfigFile: true,
+    overrideConfig: createConfig({ projectService: true, tsconfigRootDir: consumerDir }),
+  });
+  const [result] = await eslint.lintFiles([file]);
+  assert.equal(result.fatalErrorCount, 0, `${factory}: ${JSON.stringify(result.messages)}`);
+  assert.ok(
+    result.messages.some((message) => message.ruleId === '@typescript-eslint/naming-convention'),
+    `${factory} must execute type-aware rules with projectService`,
+  );
+  console.log(`Passed ${factory} with projectService`);
+}

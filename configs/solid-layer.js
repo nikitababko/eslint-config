@@ -16,6 +16,7 @@ export const DEFAULT_SOLID_FILES = ['**/*.tsx'];
  * @typedef {Object} SolidLayerOptions
  * @property {string[]} [files] - File patterns to lint. Default: `['**\/*.tsx']`.
  * @property {boolean} [isTypeAware] - Enable type-aware linting. Default: `true`.
+ * @property {import('@typescript-eslint/parser').ParserOptions['projectService']} [projectService] - Use the nearest tsconfig.json instead of tsconfigPath. Default: `false`.
  * @property {string} [tsconfigPath] - Path to tsconfig.json. Default: `'./tsconfig.json'`.
  * @property {string} [tsconfigRootDir] - Root dir for tsconfig resolution. Default: `process.cwd()`.
  */
@@ -27,6 +28,7 @@ export const solidLayer = (options = {}) => {
   const {
     files = DEFAULT_SOLID_FILES,
     isTypeAware = true,
+    projectService = false,
     tsconfigPath = './tsconfig.json',
     tsconfigRootDir = process.cwd(),
   } = options;
@@ -39,7 +41,8 @@ export const solidLayer = (options = {}) => {
         parserOptions: {
           sourceType: 'module',
           ecmaFeatures: { jsx: true },
-          project: tsconfigPath,
+          project: projectService ? false : tsconfigPath,
+          projectService,
           tsconfigRootDir,
         },
       },

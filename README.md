@@ -50,7 +50,7 @@ Built on top of:
 - **Type-aware linting** — enabled by default; use `isTypeAware: false` to lint without a TypeScript project
 - **Opinionated but escapable** — sensible defaults, easy to override per rule
 - **Modular layered architecture** — compose presets from smaller building blocks
-- **Monorepo-ready** — custom `tsconfigPath` and `tsconfigRootDir` per layer
+- **Monorepo-ready** — automatic TSConfig selection with `projectService`, or custom `tsconfigPath` and `tsconfigRootDir` per layer
 - **Zero runtime dependencies** — all dependencies are `peerDependencies`
 
 ---
@@ -339,6 +339,48 @@ export default [
 
 ---
 
+### Automatic TSConfig selection
+
+Set `projectService: true` to let TypeScript select the nearest `tsconfig.json`
+for each file, including projects connected through TypeScript project references:
+
+```js
+import { vanillaConfig } from '@nikitababko/eslint-config/vanilla';
+
+export default vanillaConfig({
+  projectService: true,
+  tsconfigRootDir: import.meta.dirname,
+});
+```
+
+The option is available in `typescriptConfig`, `vanillaConfig`, `reactConfig`,
+`solidConfig`, `reactLayer`, and `solidLayer`. React and Solid pass it to both
+their TypeScript and framework layers.
+
+It defaults to `false`, preserving the existing `tsconfigPath` behavior. When
+enabled, `projectService` takes precedence over `tsconfigPath` and disables the
+parser's `project` option, because the parser rejects both being enabled together.
+See the [typescript-eslint parser documentation](https://typescript-eslint.io/packages/parser/#projectservice).
+
+You can also pass the parser's `ProjectServiceOptions` object, for example to
+lint a small number of files outside their nearest TypeScript project:
+
+```js
+export default vanillaConfig({
+  projectService: { allowDefaultProject: ['tool.ts'] },
+  tsconfigRootDir: import.meta.dirname,
+});
+```
+
+`allowDefaultProject` patterns are relative to `tsconfigRootDir`, cannot contain
+`**`, and must not match files already included in their nearest `tsconfig.json`.
+Use this option sparingly because each matching file adds linting overhead.
+`projectService` discovers standard `tsconfig.json` files; use `tsconfigPath` for
+a custom config such as `tsconfig.eslint.json`. The service's `defaultProject`
+option only selects compiler options for files matched by `allowDefaultProject`.
+
+---
+
 ### Linting without type information
 
 Type-aware linting is enabled by default. Set `isTypeAware: false` to lint small
@@ -359,8 +401,9 @@ that require type information, using the plugin's
 [`disable-type-checked` configuration](https://typescript-eslint.io/users/configs/#disable-type-checked).
 This includes `no-floating-promises`, `no-misused-promises`, and the Boolean
 prefix checks in `naming-convention`. Syntax-based rules, import ordering,
-Unicorn, and framework checks remain enabled. `tsconfigPath` is not read in this
-mode. Run `tsc --noEmit` separately when you need compiler checks.
+Unicorn, and framework checks remain enabled. Both `projectService` and
+`tsconfigPath` are ignored in this mode. Run `tsc --noEmit` separately when you
+need compiler checks.
 
 To keep type-aware checks for source files while linting scripts outside the
 project, append a layer scoped to those scripts:
@@ -423,12 +466,13 @@ All factory functions accept an options object. All options are optional.
 
 ### `typescriptConfig(options)`
 
-| Option            | Type       | Default                                           | Description                                             |
-| ----------------- | ---------- | ------------------------------------------------- | ------------------------------------------------------- |
-| `files`           | `string[]` | `['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']` | File patterns to lint with this layer                   |
-| `isTypeAware`     | `boolean`  | `true`                                            | Enable type-aware rules and TypeScript project services |
-| `tsconfigPath`    | `string`   | `'./tsconfig.json'`                               | Path to `tsconfig.json`                                 |
-| `tsconfigRootDir` | `string`   | `process.cwd()`                                   | Root dir for tsconfig resolution                        |
+| Option            | Type                               | Default                                           | Description                                                     |
+| ----------------- | ---------------------------------- | ------------------------------------------------- | --------------------------------------------------------------- |
+| `files`           | `string[]`                         | `['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']` | File patterns to lint with this layer                           |
+| `isTypeAware`     | `boolean`                          | `true`                                            | Enable type-aware rules and TypeScript project services         |
+| `projectService`  | `boolean \| ProjectServiceOptions` | `false`                                           | Use the nearest TSConfig; overrides `tsconfigPath` when enabled |
+| `tsconfigPath`    | `string`                           | `'./tsconfig.json'`                               | Path to `tsconfig.json`                                         |
+| `tsconfigRootDir` | `string`                           | `process.cwd()`                                   | Root dir for tsconfig resolution                                |
 
 ### `stylisticConfig(options)`
 
@@ -447,6 +491,7 @@ Accepts all `baseConfig` options and all `typescriptConfig` options, with `files
 | `globalsPreset`   | `object`                                          | See `baseConfig`                                  | Passed to `baseConfig`                  |
 | `tsFiles`         | `string[]`                                        | `['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']` | Passed as `files` to `typescriptConfig` |
 | `isTypeAware`     | `boolean`                                         | `true`                                            | Passed to `typescriptConfig`            |
+| `projectService`  | `boolean \| ProjectServiceOptions`                | `false`                                           | Passed to `typescriptConfig`            |
 | `tsconfigPath`    | `string`                                          | `'./tsconfig.json'`                               | Passed to `typescriptConfig`            |
 | `tsconfigRootDir` | `string`                                          | `process.cwd()`                                   | Passed to `typescriptConfig`            |
 
@@ -454,17 +499,22 @@ Accepts all `baseConfig` options and all `typescriptConfig` options, with `files
 
 Accepts all `vanillaConfig` options plus:
 
-| Option            | Type                 | Default                   | Description                             |
-| ----------------- | -------------------- | ------------------------- | --------------------------------------- |
-| `files`           | `string[]`           | `['**/*.tsx']`            | File patterns for the React/Solid layer |
-| `isTypeAware`     | `boolean`            | `true`                    | Passed to both vanilla and the layer    |
-| `tsconfigPath`    | `string`             | `'./tsconfig.json'`       | Passed to both vanilla and the layer    |
-| `tsconfigRootDir` | `string`             | `process.cwd()`           | Passed to both vanilla and the layer    |
-| `ecmaVersion`     | `number \| 'latest'` | `'latest'` _(React only)_ | ECMAScript version for the parser       |
+| Option            | Type                               | Default                   | Description                             |
+| ----------------- | ---------------------------------- | ------------------------- | --------------------------------------- |
+| `files`           | `string[]`                         | `['**/*.tsx']`            | File patterns for the React/Solid layer |
+| `isTypeAware`     | `boolean`                          | `true`                    | Passed to both vanilla and the layer    |
+| `projectService`  | `boolean \| ProjectServiceOptions` | `false`                   | Passed to both vanilla and the layer    |
+| `tsconfigPath`    | `string`                           | `'./tsconfig.json'`       | Passed to both vanilla and the layer    |
+| `tsconfigRootDir` | `string`                           | `process.cwd()`           | Passed to both vanilla and the layer    |
+| `ecmaVersion`     | `number \| 'latest'`               | `'latest'` _(React only)_ | ECMAScript version for the parser       |
 
 The standalone `reactLayer` and `solidLayer` factories accept `files`,
-`isTypeAware`, `tsconfigPath`, and `tsconfigRootDir` with the same defaults.
+`isTypeAware`, `projectService`, `tsconfigPath`, and `tsconfigRootDir` with the same defaults.
 `reactLayer` also accepts `ecmaVersion`.
+
+`ProjectServiceOptions` is the parser's options type. See
+[Automatic TSConfig selection](#automatic-tsconfig-selection) for precedence,
+custom config filenames, and files outside a project.
 
 ---
 
@@ -626,7 +676,22 @@ export default [
 
 ## Monorepo Setup
 
-In a monorepo, each package typically has its own `tsconfig.json`. Pass the correct path to avoid cross-package resolution issues:
+In a monorepo, each package typically has its own `tsconfig.json`. A root config
+can use `projectService` to select the right project for each file automatically:
+
+```js
+// eslint.config.js at the workspace root
+import { vanillaConfig } from '@nikitababko/eslint-config/vanilla';
+
+export default vanillaConfig({
+  environment: 'neutral',
+  projectService: true,
+  tsconfigRootDir: import.meta.dirname,
+});
+```
+
+The React and Solid factories accept the same option. If packages need explicit
+TSConfig paths instead, keep separate configs such as:
 
 ```js
 // packages/ui/eslint.config.js

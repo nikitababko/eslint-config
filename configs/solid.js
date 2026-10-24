@@ -19,6 +19,7 @@ export const solidConfig = (options = {}) => {
     globalsPreset,
     tsFiles,
     isTypeAware,
+    projectService,
     tsconfigPath,
     tsconfigRootDir,
     files,
@@ -31,10 +32,11 @@ export const solidConfig = (options = {}) => {
       globalsPreset,
       tsFiles,
       isTypeAware,
+      projectService,
       tsconfigPath,
       tsconfigRootDir,
     }),
-    ...solidLayer({ files, isTypeAware, tsconfigPath, tsconfigRootDir }),
+    ...solidLayer({ files, isTypeAware, projectService, tsconfigPath, tsconfigRootDir }),
   ];
 };
 

@@ -11,6 +11,10 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Optional `projectService` support in TypeScript, vanilla, React, and Solid
+  factories and framework layers. Use the nearest `tsconfig.json` for each file,
+  including project references, or pass the parser's project service options.
+  Enabling it overrides `tsconfigPath`; `isTypeAware: false` disables both modes.
 - Optional `isTypeAware: false` mode in TypeScript, vanilla, React, and Solid
   factories and framework layers. Lint files without a `tsconfig.json` or outside
   its project while retaining syntax-based and framework rules.
