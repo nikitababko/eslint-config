@@ -750,11 +750,15 @@ Contributions, bug reports, and feature requests are welcome.
    - `pnpm typecheck`
    - `pnpm format:check`
 5. Helpful individual commands:
-   - `pnpm test:unit` - run Vitest only
+   - `pnpm test:unit` - run Vitest, including tarball contents checks, without
+     installing consumer dependencies
    - `pnpm examples:build` - build all example consumer projects only
-   - `pnpm test:minimum` - pack and test every preset in an isolated consumer with
-     exact minimum peer versions, without the workspace lockfile. CI runs this
-     on Node.js 20.19.0, 22.13.0, and 24.0.0 with strict engine and peer checks.
+   - `pnpm test:minimum` - install the tarball and exact minimum peer versions in a
+     temporary consumer outside the repository, without the workspace lockfile.
+     Lint with every preset, compile a TypeScript consumer of every public API
+     using the consumer's own compiler, and execute the emitted JavaScript to
+     check runtime exports. CI runs this on Node.js 20.19.0, 22.13.0, and 24.0.0
+     with strict engine and peer checks. Requires registry access or cached packages.
 6. Commit using [Conventional Commits](https://www.conventionalcommits.org): `pnpm commit`
 7. Open a Pull Request
 

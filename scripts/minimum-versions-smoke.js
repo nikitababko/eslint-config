@@ -5,6 +5,8 @@ import { ESLint } from 'eslint';
 
 const consumerDir = process.cwd();
 const manifest = JSON.parse(await readFile('package.json', 'utf8'));
+const rootExports = await import('@nikitababko/eslint-config');
+assert.deepEqual(Object.keys(rootExports), ['default'], 'The root must only export a preset');
 
 // Check what was actually installed, including optional framework peers.
 for (const [name, version] of Object.entries(manifest.dependencies)) {

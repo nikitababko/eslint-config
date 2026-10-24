@@ -1,12 +1,12 @@
 import { execFileSync } from 'node:child_process';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { cp, mkdtemp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
-import { dirname, join, resolve } from 'node:path';
+import { mkdtemp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
 import { gunzipSync } from 'node:zlib';
 
-// These tests validate the packed consumer-facing package shape rather than
-// the workspace source files. They catch broken exports and missing packaged
-// files that regular smoke tests can miss.
+// Check archive contents without installing dependencies. Runtime imports and
+// public API types are checked by test:minimum in an installed external consumer.
 
 const PNPM_COMMAND = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
 const repoRoot = process.cwd();
@@ -26,7 +26,6 @@ const run = (command, args, options = {}) =>
 
 let tempRoot;
 let tarballPath;
-let consumerDir;
 let packagedFiles;
 
 /**
@@ -79,26 +78,15 @@ const extractTarball = async (tarball, destinationDir) => {
 };
 
 beforeAll(async () => {
-  const cacheRoot = resolve(repoRoot, '.cache');
   const packDirName = 'pack';
   const extractDirName = 'extract';
-  const packageDirName = 'package';
-  const consumerDirName = 'consumer';
 
-  await mkdir(cacheRoot, { recursive: true });
-  tempRoot = await mkdtemp(join(cacheRoot, 'packaging-smoke-'));
+  tempRoot = await mkdtemp(join(tmpdir(), 'packaging-smoke-'));
 
   const packDir = join(tempRoot, packDirName);
   const extractDir = join(tempRoot, extractDirName);
-  const extractedPackageDir = join(extractDir, packageDirName);
 
-  consumerDir = join(tempRoot, consumerDirName);
-
-  await Promise.all([
-    mkdir(packDir, { recursive: true }),
-    mkdir(extractDir, { recursive: true }),
-    mkdir(join(consumerDir, 'node_modules', '@nikitababko'), { recursive: true }),
-  ]);
+  await Promise.all([mkdir(packDir, { recursive: true }), mkdir(extractDir, { recursive: true })]);
 
   run(PNPM_COMMAND, ['pack', '--pack-destination', packDir]);
 
@@ -111,12 +99,6 @@ beforeAll(async () => {
 
   tarballPath = join(packDir, firstTarball);
   packagedFiles = await extractTarball(tarballPath, extractDir);
-
-  await cp(
-    extractedPackageDir,
-    join(consumerDir, 'node_modules', '@nikitababko', 'eslint-config'),
-    { recursive: true },
-  );
 }, 30_000);
 
 afterAll(async () => {
@@ -125,49 +107,7 @@ afterAll(async () => {
   }
 });
 
-/**
- * @param {string} script
- */
-const runConsumerScript = (script) =>
-  execFileSync(process.execPath, ['--input-type=module', '-e', script], {
-    cwd: consumerDir,
-    encoding: 'utf8',
-    stdio: 'pipe',
-  }).trim();
-
 describe('Packaging smoke', () => {
-  it('consumer can typecheck the packed stylistic API', async () => {
-    const sourcePath = join(consumerDir, 'stylistic-api.mts');
-    await writeFile(
-      sourcePath,
-      `import type { Linter } from 'eslint';
-      import stylistic, {
-        stylisticConfig,
-        stylisticRules,
-        DEFAULT_STYLISTIC_FILES,
-        type StylisticConfigOptions,
-      } from '@nikitababko/eslint-config/stylistic';
-
-      const options: StylisticConfigOptions = { files: DEFAULT_STYLISTIC_FILES };
-      const config: Linter.Config[] = [...stylistic, ...stylisticConfig(options)];
-      const rules: Record<string, Linter.RuleEntry> = stylisticRules;
-      `,
-    );
-
-    expect(() =>
-      run(process.execPath, [
-        join(repoRoot, 'node_modules', 'typescript', 'bin', 'tsc'),
-        '--noEmit',
-        '--strict',
-        '--module',
-        'NodeNext',
-        '--target',
-        'ES2022',
-        sourcePath,
-      ]),
-    ).not.toThrow();
-  });
-
   it('packed tarball contains exported runtime and type files', () => {
     expect(packagedFiles).toEqual(
       expect.arrayContaining([
@@ -189,55 +129,5 @@ describe('Packaging smoke', () => {
         'package/configs/solid.d.ts',
       ]),
     );
-  });
-
-  it('consumer can import packed package root and public subpaths', () => {
-    const output = runConsumerScript(`
-      const root = await import('@nikitababko/eslint-config');
-      const base = await import('@nikitababko/eslint-config/base');
-      const typescript = await import('@nikitababko/eslint-config/typescript');
-      const stylistic = await import('@nikitababko/eslint-config/stylistic');
-      const vanilla = await import('@nikitababko/eslint-config/vanilla');
-      const react = await import('@nikitababko/eslint-config/react');
-      const solid = await import('@nikitababko/eslint-config/solid');
-
-      console.log(JSON.stringify({
-        rootDefaultIsArray: Array.isArray(root.default),
-        rootHasNamedExports: Object.keys(root).some((key) => key !== 'default'),
-        baseDefaultIsArray: Array.isArray(base.default),
-        hasBaseConfig: typeof base.baseConfig === 'function',
-        typescriptDefaultIsArray: Array.isArray(typescript.default),
-        hasTypescriptConfig: typeof typescript.typescriptConfig === 'function',
-        stylisticDefaultIsArray: Array.isArray(stylistic.default),
-        hasStylisticConfig: typeof stylistic.stylisticConfig === 'function',
-        hasStylisticRules: typeof stylistic.stylisticRules === 'object',
-        hasStylisticFiles: Array.isArray(stylistic.DEFAULT_STYLISTIC_FILES),
-        vanillaDefaultIsArray: Array.isArray(vanilla.default),
-        hasVanillaSubpathConfig: typeof vanilla.vanillaConfig === 'function',
-        hasReactLayer: typeof react.reactLayer === 'function',
-        hasReactFiles: Array.isArray(react.DEFAULT_REACT_FILES),
-        hasSolidLayer: typeof solid.solidLayer === 'function',
-        hasSolidFiles: Array.isArray(solid.DEFAULT_SOLID_FILES),
-      }));
-    `);
-
-    expect(JSON.parse(output)).toEqual({
-      rootDefaultIsArray: true,
-      rootHasNamedExports: false,
-      baseDefaultIsArray: true,
-      hasBaseConfig: true,
-      typescriptDefaultIsArray: true,
-      hasTypescriptConfig: true,
-      stylisticDefaultIsArray: true,
-      hasStylisticConfig: true,
-      hasStylisticRules: true,
-      hasStylisticFiles: true,
-      vanillaDefaultIsArray: true,
-      hasVanillaSubpathConfig: true,
-      hasReactLayer: true,
-      hasReactFiles: true,
-      hasSolidLayer: true,
-      hasSolidFiles: true,
-    });
   });
 });
