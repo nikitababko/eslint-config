@@ -11,6 +11,10 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Optional `strict` layer for TypeScript, vanilla, React, and Solid presets.
+  Reject unsafe operations involving `any`, require exhaustive union and enum
+  switches, and treat explicit `any` and floating promises as errors. Scope the
+  checks with `strictConfig`; use `isTypeAware: false` for untyped files.
 - Optional `projectService` support in TypeScript, vanilla, React, and Solid
   factories and framework layers. Use the nearest `tsconfig.json` for each file,
   including project references, or pass the parser's project service options.

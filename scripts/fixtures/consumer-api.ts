@@ -17,6 +17,12 @@ import stylistic, {
   DEFAULT_STYLISTIC_FILES,
   type StylisticConfigOptions,
 } from '@nikitababko/eslint-config/stylistic';
+import strict, {
+  strictConfig,
+  strictRules,
+  DEFAULT_STRICT_FILES,
+  type StrictConfigOptions,
+} from '@nikitababko/eslint-config/strict';
 import vanilla, {
   vanillaConfig,
   type VanillaConfigOptions,
@@ -42,6 +48,7 @@ const typescriptOptions: TypescriptConfigOptions = {
   tsconfigRootDir: '.',
 };
 const stylisticOptions: StylisticConfigOptions = { files: DEFAULT_STYLISTIC_FILES };
+const strictOptions: StrictConfigOptions = { files: DEFAULT_STRICT_FILES, isTypeAware: true };
 const vanillaOptions: VanillaConfigOptions = {
   ...baseOptions,
   tsFiles: typescriptOptions.files,
@@ -69,6 +76,9 @@ const presets: Linter.Config[][] = [
   typescriptConfig({ isTypeAware: false }),
   stylistic,
   stylisticConfig(stylisticOptions),
+  strict,
+  strictConfig(strictOptions),
+  strictConfig({ isTypeAware: false }),
   vanilla,
   vanillaConfig(vanillaOptions),
   vanillaConfig({ projectService: true }),
@@ -88,11 +98,12 @@ const presets: Linter.Config[][] = [
   solidLayer({ projectService: true }),
   solidLayer({ isTypeAware: false }),
 ];
-const rules: Record<string, Linter.RuleEntry>[] = [commonTsRules, stylisticRules];
+const rules: Record<string, Linter.RuleEntry>[] = [commonTsRules, stylisticRules, strictRules];
 
 for (const files of [
   DEFAULT_TS_FILES,
   DEFAULT_STYLISTIC_FILES,
+  DEFAULT_STRICT_FILES,
   DEFAULT_REACT_FILES,
   DEFAULT_SOLID_FILES,
 ]) {

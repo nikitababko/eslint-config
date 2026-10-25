@@ -21,6 +21,10 @@
       "types": "./configs/stylistic.d.ts",
       "default": "./configs/stylistic.js"
     },
+    "./strict": {
+      "types": "./configs/strict.d.ts",
+      "default": "./configs/strict.js"
+    },
     "./vanilla": {
       "types": "./configs/vanilla.d.ts",
       "default": "./configs/vanilla.js"

@@ -80,3 +80,28 @@ for (const [subpath, factory, file] of [
   );
   console.log(`Passed ${factory} with projectService`);
 }
+
+const { default: strict } = await import('@nikitababko/eslint-config/strict');
+const { vanillaConfig } = await import('@nikitababko/eslint-config/vanilla');
+const strictESLint = new ESLint({
+  overrideConfigFile: true,
+  overrideConfig: [...vanillaConfig({ projectService: true }), ...strict],
+});
+const [strictResult] = await strictESLint.lintText(
+  `export const value = JSON.parse('{}');
+  export function describeState(state: 'loading' | 'ready') {
+    switch (state) { case 'loading': return 'Loading'; }
+  }`,
+  { filePath: join(consumerDir, 'sample.ts') },
+);
+assert.equal(strictResult.fatalErrorCount, 0, JSON.stringify(strictResult.messages));
+for (const ruleId of [
+  '@typescript-eslint/no-unsafe-assignment',
+  '@typescript-eslint/switch-exhaustiveness-check',
+]) {
+  assert.ok(
+    strictResult.messages.some((message) => message.ruleId === ruleId && message.severity === 2),
+    `The strict layer must execute ${ruleId}`,
+  );
+}
+console.log('Passed @nikitababko/eslint-config/strict with type-aware safety checks');

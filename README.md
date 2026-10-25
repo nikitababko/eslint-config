@@ -30,6 +30,7 @@ Built on top of:
   - [Base (JS only)](#base)
   - [TypeScript layer](#typescript-layer)
   - [Linting without type information](#linting-without-type-information)
+  - [Strict layer (optional)](#strict-layer)
   - [Stylistic layer (optional)](#stylistic-layer)
 - [Configuration Options](#configuration-options)
 - [Key Rules](#key-rules)
@@ -48,6 +49,7 @@ Built on top of:
 - **Prettier-compatible** — default presets leave formatting to Prettier;
   stricter formatting checks are available in an optional stylistic layer
 - **Type-aware linting** — enabled by default; use `isTypeAware: false` to lint without a TypeScript project
+- **Optional strict checks** — catch unsafe `any` operations and incomplete `switch` statements
 - **Opinionated but escapable** — sensible defaults, easy to override per rule
 - **Modular layered architecture** — compose presets from smaller building blocks
 - **Monorepo-ready** — automatic TSConfig selection with `projectService`, or custom `tsconfigPath` and `tsconfigRootDir` per layer
@@ -423,6 +425,50 @@ export default [
 
 ---
 
+### Strict layer
+
+Append the optional strict layer **after** your TypeScript, vanilla, React, or
+Solid preset to enable additional safety checks:
+
+```js
+import vanilla from '@nikitababko/eslint-config/vanilla';
+import strict from '@nikitababko/eslint-config/strict';
+
+export default [...vanilla, ...strict];
+```
+
+The preceding preset supplies the TypeScript parser and project settings, including
+`projectService` or `tsconfigPath`. The strict layer adds rules and the
+typescript-eslint plugin without changing those settings. It covers `.ts`, `.tsx`,
+`.mts`, and `.cts` by default. Use `strictConfig({ files: ['src/**/*.ts'] })` to
+limit stricter checks to selected files; those files must also match the preceding
+language or framework layer.
+
+The layer enables five `no-unsafe-*` checks for operations involving `any` and
+[`switch-exhaustiveness-check`](https://typescript-eslint.io/rules/switch-exhaustiveness-check/).
+Every member of a union or enum must have an explicit `case`; a `default` branch
+does not hide missing cases. It also raises `no-explicit-any` and
+`no-floating-promises` from warnings to errors. See [strict rules](#strict) for
+the complete rule list.
+
+Most strict checks require type information. For projects without a TSConfig,
+pass `isTypeAware: false` to both layers to keep the syntax-based
+`no-explicit-any` error:
+
+```js
+import { vanillaConfig } from '@nikitababko/eslint-config/vanilla';
+import { strictConfig } from '@nikitababko/eslint-config/strict';
+
+export default [...vanillaConfig({ isTypeAware: false }), ...strictConfig({ isTypeAware: false })];
+```
+
+As in the TypeScript layer, `strictConfig({ isTypeAware: false })` disables
+inherited type-aware rules and project services for its selected files. For a
+mixed project, append this untyped override after the typed strict layer and
+scope it to scripts outside the TypeScript project.
+
+---
+
 ### Stylistic layer
 
 Optional formatting checks for projects that want ESLint to enforce the package's
@@ -473,6 +519,16 @@ All factory functions accept an options object. All options are optional.
 | `projectService`  | `boolean \| ProjectServiceOptions` | `false`                                           | Use the nearest TSConfig; overrides `tsconfigPath` when enabled |
 | `tsconfigPath`    | `string`                           | `'./tsconfig.json'`                               | Path to `tsconfig.json`                                         |
 | `tsconfigRootDir` | `string`                           | `process.cwd()`                                   | Root dir for tsconfig resolution                                |
+
+### `strictConfig(options)`
+
+| Option        | Type       | Default                                           | Description                                                               |
+| ------------- | ---------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
+| `files`       | `string[]` | `['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']` | File patterns for optional strict checks                                  |
+| `isTypeAware` | `boolean`  | `true`                                            | Use inherited type information; `false` disables typed rules and services |
+
+The preceding language or framework preset configures `projectService`,
+`tsconfigPath`, and `tsconfigRootDir`.
 
 ### `stylisticConfig(options)`
 
@@ -543,6 +599,26 @@ const open = false;
 const isLoading = true;
 const isOpen = false;
 ```
+
+### Strict
+
+The optional `strict` layer enables these checks at error severity, raising
+`no-explicit-any` and `no-floating-promises` from their default warnings.
+All except `no-explicit-any` require type information.
+
+| Rule                                             | Purpose                                            |
+| ------------------------------------------------ | -------------------------------------------------- |
+| `@typescript-eslint/no-explicit-any`             | Reject explicit `any` annotations                  |
+| `@typescript-eslint/no-floating-promises`        | Require handling promises                          |
+| `@typescript-eslint/no-unsafe-argument`          | Reject `any` arguments passed to typed parameters  |
+| `@typescript-eslint/no-unsafe-assignment`        | Reject unsafe assignments of `any`                 |
+| `@typescript-eslint/no-unsafe-call`              | Reject calling values typed as `any`               |
+| `@typescript-eslint/no-unsafe-member-access`     | Reject property access on `any`                    |
+| `@typescript-eslint/no-unsafe-return`            | Reject unsafe returns of `any`                     |
+| `@typescript-eslint/switch-exhaustiveness-check` | Require explicit cases for every union/enum member |
+
+The layer uses a curated rule set rather than typescript-eslint's
+`strict-type-checked` config. It adds no formatting rules.
 
 ### Stylistic
 
@@ -734,6 +810,7 @@ export default vanillaConfig({
 | `@nikitababko/eslint-config/base`       | `baseConfig()` (array)       | `baseConfig`                                                   |
 | `@nikitababko/eslint-config/typescript` | `typescriptConfig()` (array) | `typescriptConfig`, `commonTsRules`, `DEFAULT_TS_FILES`        |
 | `@nikitababko/eslint-config/stylistic`  | `stylisticConfig()` (array)  | `stylisticConfig`, `stylisticRules`, `DEFAULT_STYLISTIC_FILES` |
+| `@nikitababko/eslint-config/strict`     | `strictConfig()` (array)     | `strictConfig`, `strictRules`, `DEFAULT_STRICT_FILES`          |
 | `@nikitababko/eslint-config/vanilla`    | `vanillaConfig()` (array)    | `vanillaConfig`                                                |
 | `@nikitababko/eslint-config/react`      | `reactConfig()` (array)      | `reactConfig`, `reactLayer`, `DEFAULT_REACT_FILES`             |
 | `@nikitababko/eslint-config/solid`      | `solidConfig()` (array)      | `solidConfig`, `solidLayer`, `DEFAULT_SOLID_FILES`             |
