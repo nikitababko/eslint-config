@@ -49,7 +49,7 @@ jobs:
       # npm publish to npmjs
       - run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.AUTH_TOKEN_NPM }}
 
   publish-gh:
     name: Publish to GitHub Packages
