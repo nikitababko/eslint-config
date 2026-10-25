@@ -8,11 +8,14 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { validateRelease } from '../scripts/validate-release.js';
 
 const scriptPath = fileURLToPath(new URL('../scripts/validate-release.js', import.meta.url));
-const repositoryChangelog = readFileSync(new URL('../CHANGELOG.md', import.meta.url), 'utf8');
+const releaseChangelog = readFileSync(
+  new URL('./fixtures/release-changelog.md', import.meta.url),
+  'utf8',
+);
 
 describe('Release validation', () => {
   it('accepts a tag matching package.json and returns its release notes', () => {
-    const notes = validateRelease('0.1.0', 'v0.1.0', repositoryChangelog);
+    const notes = validateRelease('0.1.0', 'v0.1.0', releaseChangelog);
 
     expect(notes).toContain('## [0.1.0]');
     expect(notes).toContain('- Exports map entrypoints for presets');
@@ -26,7 +29,7 @@ describe('Release validation', () => {
   });
 
   it('rejects a different tag even when its changelog section exists', () => {
-    expect(() => validateRelease('0.2.0', 'v0.1.0', repositoryChangelog)).toThrow(
+    expect(() => validateRelease('0.2.0', 'v0.1.0', releaseChangelog)).toThrow(
       'Release tag v0.1.0 does not match package.json version 0.2.0; expected v0.2.0.',
     );
   });
@@ -34,18 +37,18 @@ describe('Release validation', () => {
   it.each(['0.1.0', 'v0.1.0-extra', 'v0.1.00'])(
     'rejects a tag that does not match the exact v<version> format: %s',
     (tag) => {
-      expect(() => validateRelease('0.1.0', tag, repositoryChangelog)).toThrow('expected v0.1.0.');
+      expect(() => validateRelease('0.1.0', tag, releaseChangelog)).toThrow('expected v0.1.0.');
     },
   );
 
   it.each([undefined, ''])('rejects a missing release tag: %j', (tag) => {
-    expect(() => validateRelease('0.1.0', tag, repositoryChangelog)).toThrow(
+    expect(() => validateRelease('0.1.0', tag, releaseChangelog)).toThrow(
       'Provide a release tag or set GITHUB_REF_NAME.',
     );
   });
 
   it('rejects a release with no matching notes', () => {
-    expect(() => validateRelease('0.2.0', 'v0.2.0', repositoryChangelog)).toThrow(
+    expect(() => validateRelease('0.2.0', 'v0.2.0', releaseChangelog)).toThrow(
       'Could not find section for version 0.2.0 in CHANGELOG.md.',
     );
   });
@@ -68,7 +71,7 @@ describe('Release validation CLI', () => {
   beforeEach(() => {
     directory = mkdtempSync(join(tmpdir(), 'eslint-config-release-validation-'));
     writeFileSync(join(directory, 'package.json'), JSON.stringify({ version: '0.1.0' }));
-    writeFileSync(join(directory, 'CHANGELOG.md'), repositoryChangelog);
+    writeFileSync(join(directory, 'CHANGELOG.md'), releaseChangelog);
   });
 
   afterEach(() => {

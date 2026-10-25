@@ -8,7 +8,10 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { extractReleaseNotes } from '../scripts/extract-release-notes.js';
 
 const scriptPath = fileURLToPath(new URL('../scripts/extract-release-notes.js', import.meta.url));
-const repositoryChangelog = readFileSync(new URL('../CHANGELOG.md', import.meta.url), 'utf8');
+const releaseChangelog = readFileSync(
+  new URL('./fixtures/release-changelog.md', import.meta.url),
+  'utf8',
+);
 
 describe('Release notes extraction', () => {
   it.each(['[0.1.0]', '[v0.1.0]', '0.1.0', 'v0.1.0'])(
@@ -53,8 +56,8 @@ describe('Release notes extraction', () => {
     expect(extractReleaseNotes(changelog, '0.2.0')).toBe('## [0.2.0]\r\n\r\n- Change\n');
   });
 
-  it('extracts the current repository release including its final bullet', () => {
-    const notes = extractReleaseNotes(repositoryChangelog, 'v0.1.0');
+  it('extracts a release from the fixture including its final bullet', () => {
+    const notes = extractReleaseNotes(releaseChangelog, 'v0.1.0');
 
     expect(notes).toContain('## [0.1.0] – 2026-02-15');
     expect(notes).toContain('### Added');
@@ -81,7 +84,7 @@ describe('Release notes extraction', () => {
   });
 
   it.each([undefined, '', 'v'])('fails when the release version is %j', (tag) => {
-    expect(() => extractReleaseNotes(repositoryChangelog, tag)).toThrow(
+    expect(() => extractReleaseNotes(releaseChangelog, tag)).toThrow(
       'Provide a release version or set GITHUB_REF_NAME.',
     );
   });
@@ -92,7 +95,7 @@ describe('Release notes CLI', () => {
 
   beforeEach(() => {
     directory = mkdtempSync(join(tmpdir(), 'eslint-config-release-notes-'));
-    writeFileSync(join(directory, 'CHANGELOG.md'), repositoryChangelog);
+    writeFileSync(join(directory, 'CHANGELOG.md'), releaseChangelog);
   });
 
   afterEach(() => {
