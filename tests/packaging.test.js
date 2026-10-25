@@ -118,6 +118,7 @@ describe('Packaging smoke', () => {
         'package/configs/base.js',
         'package/configs/base.d.ts',
         'package/configs/typescript.js',
+        'package/configs/typescript-layer.js',
         'package/configs/typescript.d.ts',
         'package/configs/stylistic.js',
         'package/configs/stylistic.d.ts',

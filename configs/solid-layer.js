@@ -1,14 +1,7 @@
 import solid from 'eslint-plugin-solid';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
-import * as tsParser from '@typescript-eslint/parser';
-import unicorn from 'eslint-plugin-unicorn';
-import stylistic from '@stylistic/eslint-plugin';
-import importX from 'eslint-plugin-import-x';
 
-import { commonTsRules } from './typescript.js';
+import { createTypescriptLayer } from './typescript-layer.js';
 import { RULE_STATUSES } from './constants.js';
-import { typescriptCompatibilityConfig } from './typescript-compatibility.js';
-import { disableTypeCheckingConfig } from './typescript-type-checking.js';
 
 export const DEFAULT_SOLID_FILES = ['**/*.tsx'];
 
@@ -25,37 +18,15 @@ export const DEFAULT_SOLID_FILES = ['**/*.tsx'];
  * @param {SolidLayerOptions} [options]
  */
 export const solidLayer = (options = {}) => {
-  const {
-    files = DEFAULT_SOLID_FILES,
-    isTypeAware = true,
-    projectService = false,
-    tsconfigPath = './tsconfig.json',
-    tsconfigRootDir = process.cwd(),
-  } = options;
+  const { files = DEFAULT_SOLID_FILES } = options;
 
-  return [
+  return createTypescriptLayer(
+    { ...options, files },
     {
-      files,
-      languageOptions: {
-        parser: tsParser,
-        parserOptions: {
-          sourceType: 'module',
-          ecmaFeatures: { jsx: true },
-          project: projectService ? false : tsconfigPath,
-          projectService,
-          tsconfigRootDir,
-        },
-      },
       plugins: {
-        '@typescript-eslint': tsPlugin,
-        '@stylistic': stylistic,
-        'import-x': importX,
-        unicorn,
         solid,
       },
       rules: {
-        ...commonTsRules,
-
         // recommended from solid plugin
         ...(solid.configs?.recommended?.rules ?? {}),
 
@@ -72,9 +43,7 @@ export const solidLayer = (options = {}) => {
         'solid/prefer-for': RULE_STATUSES.OFF,
       },
     },
-    typescriptCompatibilityConfig(files),
-    ...(isTypeAware ? [] : [disableTypeCheckingConfig(files)]),
-  ];
+  );
 };
 
 export default solidLayer();

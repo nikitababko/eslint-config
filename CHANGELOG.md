@@ -28,6 +28,12 @@ and this project follows [Semantic Versioning](https://semver.org/).
   file-scoped formatting checks. Append it after a preset to enable the package's
   chosen style.
 
+### Changed
+
+- Centralize shared TypeScript parser options, plugins, rules, compatibility,
+  and type-aware mode handling in an internal layer builder used by TypeScript,
+  React, and Solid. Preserve the public API and existing preset behavior.
+
 ### Fixed
 
 - Require example lint alongside the existing CI checks before publishing. Check
