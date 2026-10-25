@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/nikitababko/eslint-config/master/assets/logo.svg" alt="@nikitababko/eslint-config logo" width="112" height="112">
+
 # @nikitababko/eslint-config
 
 [![npm version](https://img.shields.io/npm/v/@nikitababko/eslint-config?style=flat-square)](https://www.npmjs.com/package/@nikitababko/eslint-config)

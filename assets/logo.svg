@@ -1,0 +1,23 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="160"
+  height="160"
+  viewBox="0 0 160 160"
+  fill="none"
+  role="img"
+  aria-labelledby="logo-title logo-description"
+>
+  <title id="logo-title">@nikitababko/eslint-config</title>
+  <desc id="logo-description">
+    Three stacked configuration layers with a checkmark cut into the top layer.
+  </desc>
+  <g stroke="#8b5cf6" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m24 105 56 32 56-32" />
+    <path d="m24 82 56 32 56-32" />
+  </g>
+  <path
+    fill="#8b5cf6"
+    fill-rule="evenodd"
+    d="M74 20q6-3.5 12 0l54 31q7 4 0 8L86 90q-6 3.5-12 0L20 59q-7-4 0-8Zm-21 33 7-4 15 8.5L101 42l7 4.5L75 66Z"
+  />
+</svg>
