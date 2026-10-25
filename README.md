@@ -990,6 +990,29 @@ They also run `node scripts/validate-release.js`, which requires the tag to equa
 Any failed check prevents publication and GitHub Release creation.
 To check release metadata locally, run `pnpm release:check v0.1.0`.
 
+Before pushing a release tag, configure the `AUTH_TOKEN_NPM` repository secret in
+GitHub Actions. Use a valid npm granular access token with read and write access
+to publish `@nikitababko/eslint-config` and bypass 2FA enabled. Package settings
+must allow token-based publishing. See the
+[npm CI/CD documentation](https://docs.npmjs.com/using-private-packages-in-a-ci-cd-workflow/).
+GitHub Packages uses the `AUTH_GITHUB_TOKEN` repository secret containing a GitHub
+personal access token (classic) with `write:packages` permission.
+The GitHub Release is created with the automatically provided `GITHUB_TOKEN`;
+its job has `contents: write` permission.
+
+After committing the release preparation and passing the checks above, create and
+push the matching tag from that commit:
+
+```bash
+pnpm release:check v0.1.0
+git tag -a v0.1.0 -m "Release v0.1.0"
+git push origin master
+git push origin v0.1.0
+```
+
+The release workflow publishes to npm first, then GitHub Packages, and finally
+creates a GitHub Release with the changelog notes and npm tarball attached.
+
 ---
 
 ## License
