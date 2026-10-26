@@ -80,39 +80,42 @@ Install the package and the shared peer dependencies used by the default presets
 
 ```bash
 # npm
-npm install -D @nikitababko/eslint-config eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
+npm install -D @nikitababko/eslint-config eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin@^8.55.0 @typescript-eslint/parser@^8.55.0 @stylistic/eslint-plugin@^5.8.0 eslint-config-prettier@^10.1.8 eslint-plugin-unicorn@^63.0.0 eslint-plugin-import-x@^4.16.1 globals@^17.3.0
 
 # pnpm
-pnpm add -D @nikitababko/eslint-config eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
+pnpm add -D @nikitababko/eslint-config eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin@^8.55.0 @typescript-eslint/parser@^8.55.0 @stylistic/eslint-plugin@^5.8.0 eslint-config-prettier@^10.1.8 eslint-plugin-unicorn@^63.0.0 eslint-plugin-import-x@^4.16.1 globals@^17.3.0
 
 # yarn
-yarn add -D @nikitababko/eslint-config eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
+yarn add -D @nikitababko/eslint-config eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin@^8.55.0 @typescript-eslint/parser@^8.55.0 @stylistic/eslint-plugin@^5.8.0 eslint-config-prettier@^10.1.8 eslint-plugin-unicorn@^63.0.0 eslint-plugin-import-x@^4.16.1 globals@^17.3.0
 ```
+
+The version ranges below match this package's `peerDependencies`. Keep them when
+installing so the plugins remain compatible with ESLint 9.
 
 For **React** projects, also install:
 
 ```bash
 # npm
-npm install -D eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh
+npm install -D eslint-plugin-react@^7.37.5 eslint-plugin-react-hooks@^7.0.1 eslint-plugin-react-refresh@^0.5.0
 
 # pnpm
-pnpm add -D eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh
+pnpm add -D eslint-plugin-react@^7.37.5 eslint-plugin-react-hooks@^7.0.1 eslint-plugin-react-refresh@^0.5.0
 
 # yarn
-yarn add -D eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh
+yarn add -D eslint-plugin-react@^7.37.5 eslint-plugin-react-hooks@^7.0.1 eslint-plugin-react-refresh@^0.5.0
 ```
 
 For **SolidJS** projects:
 
 ```bash
 # npm
-npm install -D eslint-plugin-solid
+npm install -D eslint-plugin-solid@^0.14.5
 
 # pnpm
-pnpm add -D eslint-plugin-solid
+pnpm add -D eslint-plugin-solid@^0.14.5
 
 # yarn
-yarn add -D eslint-plugin-solid
+yarn add -D eslint-plugin-solid@^0.14.5
 ```
 
 > Only the framework-specific packages are optional peer dependencies — install
@@ -905,13 +908,13 @@ Install only the packages relevant to your preset. For vanilla TypeScript:
 
 ```bash
 # npm
-npm install -D eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
+npm install -D eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin@^8.55.0 @typescript-eslint/parser@^8.55.0 @stylistic/eslint-plugin@^5.8.0 eslint-config-prettier@^10.1.8 eslint-plugin-unicorn@^63.0.0 eslint-plugin-import-x@^4.16.1 globals@^17.3.0
 
 # pnpm
-pnpm add -D eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
+pnpm add -D eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin@^8.55.0 @typescript-eslint/parser@^8.55.0 @stylistic/eslint-plugin@^5.8.0 eslint-config-prettier@^10.1.8 eslint-plugin-unicorn@^63.0.0 eslint-plugin-import-x@^4.16.1 globals@^17.3.0
 
 # yarn
-yarn add -D eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser @stylistic/eslint-plugin eslint-config-prettier eslint-plugin-unicorn eslint-plugin-import-x globals
+yarn add -D eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin@^8.55.0 @typescript-eslint/parser@^8.55.0 @stylistic/eslint-plugin@^5.8.0 eslint-config-prettier@^10.1.8 eslint-plugin-unicorn@^63.0.0 eslint-plugin-import-x@^4.16.1 globals@^17.3.0
 ```
 
 ---
@@ -958,6 +961,10 @@ Contributions, bug reports, and feature requests are welcome.
 5. Helpful individual commands:
    - `pnpm test:unit` - run Vitest, including tarball contents checks, without
      installing consumer dependencies
+   - `pnpm test:readme` - install the packed package in isolated Vanilla, React,
+     and Solid consumers using the npm commands read from this README, then lint
+     with each preset. Resolves the documented version ranges without the workspace
+     lockfile and checks strict peer compatibility. Requires registry access.
    - `pnpm examples:build` - build all example consumer projects only
    - `pnpm test:minimum` - install the tarball and exact minimum peer versions in a
      temporary consumer outside the repository, without the workspace lockfile.
@@ -983,7 +990,8 @@ heading and subsections, to `release-notes.md`. In the release workflow, the ver
 comes from `GITHUB_REF_NAME`. A missing version or section fails the command.
 
 CI runs on branch pushes and pull requests. It checks tests, example builds and
-lint, root lint, types, formatting, and minimum supported dependency versions.
+lint, root lint, types, formatting, minimum supported dependency versions, and
+fresh installation using the README commands.
 Tag pushes matching `v*` rerun this CI before publishing to either registry.
 They also run `node scripts/validate-release.js`, which requires the tag to equal
 `v<package.json version>` and a non-empty release section in `CHANGELOG.md`.

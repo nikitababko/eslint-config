@@ -42,6 +42,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
 - Support for Node.js `^20.19.0 || ^22.13.0 || >=24.0.0` and ESLint `^9.38.0`.
   Verify exact minimum peer versions in an isolated packed consumer on each
   minimum Node.js version in CI.
+- Installation commands with compatible peer dependency ranges for npm, pnpm,
+  and Yarn, verified in isolated Vanilla, React, and Solid consumers in CI.
 - Release workflow for npm and GitHub Packages with CI checks, example lint,
   minimum supported version checks, tag/version matching, and non-empty release
   notes required before publishing.

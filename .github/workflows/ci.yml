@@ -34,6 +34,20 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm format:check
 
+  readme-install:
+    name: README installation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 10.20.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      # Resolve the documented ranges in isolated consumers without the workspace lockfile.
+      - run: pnpm test:readme
+
   minimum-versions:
     name: Minimum peers (Node.js ${{ matrix.node }})
     runs-on: ubuntu-latest

@@ -136,6 +136,7 @@
     "typecheck": "pnpm exec tsc -p tsconfig.typecheck.json",
     "test": "pnpm test:unit && pnpm examples:build",
     "test:minimum": "node scripts/test-minimum-versions.js",
+    "test:readme": "node scripts/test-readme-install.js",
     "test:unit": "vitest run",
     "test:watch": "vitest"
   }
