@@ -1,2 +1,6 @@
 packages:
   - examples/*
+
+overrides:
+  # external-editor still requests tmp 0.0.x; 0.2.6 fixes GHSA-ph9p-34f9-6g65.
+  external-editor@3.1.0>tmp: ^0.2.6
