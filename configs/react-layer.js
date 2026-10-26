@@ -2,14 +2,14 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 
-import { createTypescriptLayer } from './typescript-layer.js';
+import { createTypescriptLayer, DEFAULT_TS_FILES } from './typescript-layer.js';
 import { RULE_STATUSES } from './constants.js';
 
-export const DEFAULT_REACT_FILES = ['**/*.tsx'];
+export const DEFAULT_REACT_FILES = [...DEFAULT_TS_FILES];
 
 /**
  * @typedef {Object} ReactLayerOptions
- * @property {string[]} [files] - File patterns to lint. Default: `['**\/*.tsx']`.
+ * @property {string[]} [files] - File patterns to lint. Default: `['**\/*.ts', '**\/*.tsx', '**\/*.mts', '**\/*.cts']`.
  * @property {boolean} [isTypeAware] - Enable type-aware linting. Default: `true`.
  * @property {import('@typescript-eslint/parser').ParserOptions['projectService']} [projectService] - Use the nearest tsconfig.json instead of tsconfigPath. Default: `false`.
  * @property {string} [tsconfigPath] - Path to tsconfig.json. Default: `'./tsconfig.json'`.

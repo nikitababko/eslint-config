@@ -72,7 +72,7 @@ describe('Module extensions with optional and custom file patterns', () => {
     const configs = [
       typescriptConfig({ ...options, files: ['**/*.ts'] }),
       vanillaConfig({ ...options, tsFiles: ['**/*.ts'] }),
-      reactConfig({ ...options, tsFiles: ['**/*.ts'] }),
+      reactConfig({ ...options, tsFiles: ['**/*.ts'], files: ['**/*.ts'] }),
       solidConfig({ ...options, tsFiles: ['**/*.ts'] }),
     ];
 

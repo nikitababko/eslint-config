@@ -15,7 +15,7 @@ const factories = [
   ['vanilla', vanillaConfig, ['ts', 'tsx', 'mts', 'cts']],
   ['react', reactConfig, ['ts', 'tsx', 'mts', 'cts']],
   ['solid', solidConfig, ['ts', 'tsx', 'mts', 'cts']],
-  ['reactLayer', reactLayer, ['tsx']],
+  ['reactLayer', reactLayer, ['ts', 'tsx', 'mts', 'cts']],
   ['solidLayer', solidLayer, ['tsx']],
 ];
 const typeAwareCode = 'export const ready: boolean = true;\nPromise.resolve();\n';

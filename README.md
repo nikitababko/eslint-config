@@ -151,8 +151,9 @@ npx eslint .
 
 The TypeScript layer selects `.ts`, `.tsx`, `.mts`, and `.cts` files by default,
 including when inherited by the React and Solid presets. Include these files in
-your `tsconfig.json` for type-aware linting. The framework-specific layers still
-select `.tsx` files by default.
+your `tsconfig.json` for type-aware linting. The React layer uses the same file
+patterns so custom hooks are checked outside TSX. The Solid layer selects `.tsx`
+files by default.
 
 ```js
 // eslint.config.js
@@ -183,7 +184,7 @@ export default vanillaConfig({
 
 ### React
 
-**Vanilla + React** — all vanilla rules plus React, React Hooks, and React Refresh rules for `.tsx` files by default.
+**Vanilla + React** — all vanilla rules plus React, React Hooks, and React Refresh rules for `.ts`, `.tsx`, `.mts`, and `.cts` files by default. This includes custom hooks in files without JSX.
 
 ```js
 // eslint.config.js
@@ -227,12 +228,12 @@ your TypeScript config via `allowJs: true` or a dedicated `tsconfig.eslint.json`
 
 ```js
 import vanilla from '@nikitababko/eslint-config/vanilla';
-import { reactLayer } from '@nikitababko/eslint-config/react';
+import { DEFAULT_REACT_FILES, reactLayer } from '@nikitababko/eslint-config/react';
 
 export default [
   ...vanilla,
   ...reactLayer({
-    files: ['**/*.tsx', '**/*.jsx'],
+    files: [...DEFAULT_REACT_FILES, '**/*.jsx'],
     tsconfigPath: './tsconfig.eslint.json',
   }),
 ];
@@ -560,18 +561,21 @@ Accepts all `baseConfig` options and all `typescriptConfig` options, with `files
 
 Accepts all `vanillaConfig` options plus:
 
-| Option            | Type                               | Default                   | Description                             |
-| ----------------- | ---------------------------------- | ------------------------- | --------------------------------------- |
-| `files`           | `string[]`                         | `['**/*.tsx']`            | File patterns for the React/Solid layer |
-| `isTypeAware`     | `boolean`                          | `true`                    | Passed to both vanilla and the layer    |
-| `projectService`  | `boolean \| ProjectServiceOptions` | `false`                   | Passed to both vanilla and the layer    |
-| `tsconfigPath`    | `string`                           | `'./tsconfig.json'`       | Passed to both vanilla and the layer    |
-| `tsconfigRootDir` | `string`                           | `process.cwd()`           | Passed to both vanilla and the layer    |
-| `ecmaVersion`     | `number \| 'latest'`               | `'latest'` _(React only)_ | ECMAScript version for the parser       |
+| Option            | Type                               | Default                                             | Description                             |
+| ----------------- | ---------------------------------- | --------------------------------------------------- | --------------------------------------- |
+| `files`           | `string[]`                         | React: `DEFAULT_REACT_FILES`; Solid: `['**/*.tsx']` | File patterns for the React/Solid layer |
+| `isTypeAware`     | `boolean`                          | `true`                                              | Passed to both vanilla and the layer    |
+| `projectService`  | `boolean \| ProjectServiceOptions` | `false`                                             | Passed to both vanilla and the layer    |
+| `tsconfigPath`    | `string`                           | `'./tsconfig.json'`                                 | Passed to both vanilla and the layer    |
+| `tsconfigRootDir` | `string`                           | `process.cwd()`                                     | Passed to both vanilla and the layer    |
+| `ecmaVersion`     | `number \| 'latest'`               | `'latest'` _(React only)_                           | ECMAScript version for the parser       |
 
 The standalone `reactLayer` and `solidLayer` factories accept `files`,
 `isTypeAware`, `projectService`, `tsconfigPath`, and `tsconfigRootDir` with the same defaults.
 `reactLayer` also accepts `ecmaVersion`.
+
+`DEFAULT_REACT_FILES` is `['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']`.
+Passing `files` replaces these defaults, including the scope of hooks checks.
 
 `ProjectServiceOptions` is the parser's options type. See
 [Automatic TSConfig selection](#automatic-tsconfig-selection) for precedence,
@@ -683,7 +687,7 @@ import { MyComponent } from './my-component';
 import type { MyType } from './types';
 ```
 
-### React (`.tsx` by default)
+### React (`.ts`, `.tsx`, `.mts`, `.cts` by default)
 
 | Rule                                   | Severity    | Notes                                       |
 | -------------------------------------- | ----------- | ------------------------------------------- |
@@ -921,12 +925,16 @@ yarn add -D eslint@^9.38.0 @eslint/js@^9.38.0 @typescript-eslint/eslint-plugin@^
 
 ### `*.jsx` files are not covered by default
 
-**Cause:** The React and Solid presets are project-aware and default to `*.tsx`
-only, so `*.jsx` must be opted into explicitly.
+**Cause:** The React and Solid presets are project-aware and do not select `*.jsx`
+by default, so those files must be opted into explicitly.
 
-**Fix:** Pass `files: ['**/*.tsx', '**/*.jsx']` and make sure your TypeScript
-config includes those files via `allowJs: true` or a dedicated
-`tsconfig.eslint.json`.
+**Fix:** Include `*.jsx` explicitly and make sure your TypeScript config includes
+those files via `allowJs: true` or a dedicated `tsconfig.eslint.json`.
+
+For React, use `files: [...DEFAULT_REACT_FILES, '**/*.jsx']` to retain hooks checks
+in `.ts`, `.mts`, and `.cts` files. Import `DEFAULT_REACT_FILES` from
+`@nikitababko/eslint-config/react`.
+For Solid, use `files: ['**/*.tsx', '**/*.jsx']`.
 
 ---
 

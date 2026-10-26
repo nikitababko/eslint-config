@@ -137,8 +137,8 @@ describe('Smoke: factory functions accept options', () => {
     expect(result[0].files).toContain('**/*.tsx');
   });
 
-  it('reactLayer() defaults to TSX files only', () => {
-    expect(DEFAULT_REACT_FILES).toEqual(['**/*.tsx']);
+  it('reactLayer() defaults to all TypeScript extensions', () => {
+    expect(DEFAULT_REACT_FILES).toEqual(['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']);
   });
 
   it('solidLayer() defaults to TSX files only', () => {
