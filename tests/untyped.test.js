@@ -15,7 +15,7 @@ const factories = [
   ['react', reactConfig, ['ts', 'tsx', 'mts', 'cts']],
   ['solid', solidConfig, ['ts', 'tsx', 'mts', 'cts']],
   ['reactLayer', reactLayer, ['ts', 'tsx', 'mts', 'cts']],
-  ['solidLayer', solidLayer, ['tsx']],
+  ['solidLayer', solidLayer, ['ts', 'tsx', 'mts', 'cts']],
 ];
 const untypedOptions = {
   isTypeAware: false,

@@ -36,6 +36,9 @@ and this project follows [Semantic Versioning](https://semver.org/).
   and Solid presets, and the optional stylistic layer.
 - React Hooks checks in `.ts`, `.tsx`, `.mts`, and `.cts` files by default in the
   React preset and standalone layer.
+- Solid reactivity checks in `.ts`, `.tsx`, `.mts`, and `.cts` files by default in
+  the Solid preset and standalone layer, including stores and reactive utilities
+  without JSX.
 - Optional `stylistic` entrypoint with `stylisticConfig`, `stylisticRules`, and
   file-scoped formatting checks. Append it after a preset to enable the package's
   chosen style. Default presets leave formatting to Prettier.
