@@ -1009,6 +1009,12 @@ They also run `node scripts/validate-release.js`, which requires the tag to equa
 Any failed check prevents publication and GitHub Release creation.
 To check release metadata locally, run `pnpm release:check v0.1.0`.
 
+The validated package version selects the publication channel in both npm and
+GitHub Packages: stable versions use `latest`; prereleases such as
+`0.2.0-beta.1` or `0.2.0-rc.1` use `next`. The GitHub Release is marked as a
+prerelease and is not set as the latest release for these versions. Build metadata
+alone, such as `0.2.0+build-2`, does not make a version a prerelease.
+
 Before pushing a release tag, configure the `AUTH_TOKEN_NPM` repository secret in
 GitHub Actions. Use a valid npm granular access token with read and write access
 to publish `@nikitababko/eslint-config` and bypass 2FA enabled. Package settings
@@ -1031,6 +1037,13 @@ git push origin v0.1.0
 
 The release workflow publishes to npm first, then GitHub Packages, and finally
 creates a GitHub Release with the changelog notes and npm tarball attached.
+
+For a prerelease, set the package version to, for example, `0.2.0-beta.1`, add its
+dated release section to `CHANGELOG.md`, and commit the preparation. Then use
+`v0.2.0-beta.1` in the same validation, tagging, and push commands above.
+Install the prerelease channel with
+`npm install -D @nikitababko/eslint-config@next`. Regular installations continue
+to use the stable `latest` channel.
 
 ---
 

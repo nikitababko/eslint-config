@@ -51,6 +51,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
   and Yarn, verified in isolated Vanilla, React, and Solid consumers in CI.
 - Release workflow for npm and GitHub Packages with CI checks, example lint,
   minimum supported version checks, tag/version matching, and non-empty release
-  notes required before publishing.
+  notes required before publishing. Stable versions use the `latest` channel;
+  prereleases use `next` and are marked as GitHub prereleases without replacing
+  the latest stable release.
 - GitHub release notes generated from the matching changelog section, including
   its heading and subsections.

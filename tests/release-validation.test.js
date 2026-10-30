@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -78,11 +78,11 @@ describe('Release validation CLI', () => {
     rmSync(directory, { recursive: true, force: true });
   });
 
-  const run = (args = [], tag = 'v0.1.0') =>
+  const run = (args = [], tag = 'v0.1.0', outputPath = join(directory, 'github-output')) =>
     spawnSync(process.execPath, [scriptPath, ...args], {
       cwd: directory,
       encoding: 'utf8',
-      env: { ...process.env, GITHUB_REF_NAME: tag },
+      env: { ...process.env, GITHUB_REF_NAME: tag, GITHUB_OUTPUT: outputPath },
     });
 
   it('validates GITHUB_REF_NAME against package.json as in the workflow', () => {
@@ -100,11 +100,53 @@ describe('Release validation CLI', () => {
     expect(result.stderr).toBe('');
   });
 
+  it.each([
+    ['0.1.0', 'latest', false],
+    ['1.0.0+build.2', 'latest', false],
+    ['1.0.0+build-2', 'latest', false],
+    ['1.0.0-alpha.1', 'next', true],
+    ['1.0.0-beta.1', 'next', true],
+    ['1.0.0-rc.1', 'next', true],
+    ['1.0.0-0', 'next', true],
+    ['1.0.0-beta.1+build-2', 'next', true],
+  ])('exports the publication channel for %s', (version, npmTag, isPrerelease) => {
+    writeFileSync(join(directory, 'package.json'), JSON.stringify({ version }));
+    writeFileSync(join(directory, 'CHANGELOG.md'), `## [${version}]\n\n- Release notes\n`);
+
+    const result = run([], `v${version}`);
+
+    expect(result.status).toBe(0);
+    expect(result.stderr).toBe('');
+    expect(readFileSync(join(directory, 'github-output'), 'utf8')).toBe(
+      `npm_tag=${npmTag}\nis_prerelease=${isPrerelease}\n`,
+    );
+  });
+
+  it('appends publication metadata without replacing existing step outputs', () => {
+    writeFileSync(join(directory, 'github-output'), 'existing=value\n');
+
+    const result = run();
+
+    expect(result.status).toBe(0);
+    expect(readFileSync(join(directory, 'github-output'), 'utf8')).toBe(
+      'existing=value\nnpm_tag=latest\nis_prerelease=false\n',
+    );
+  });
+
+  it('validates locally without GITHUB_OUTPUT', () => {
+    const result = run([], 'v0.1.0', '');
+
+    expect(result.status).toBe(0);
+    expect(result.stderr).toBe('');
+    expect(existsSync(join(directory, 'github-output'))).toBe(false);
+  });
+
   it('fails when the tag does not match package.json', () => {
     const result = run([], 'v0.2.0');
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain('expected v0.1.0.');
+    expect(existsSync(join(directory, 'github-output'))).toBe(false);
   });
 
   it('fails when GITHUB_REF_NAME is missing', () => {
@@ -121,6 +163,7 @@ describe('Release validation CLI', () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain('Could not find section for version 0.1.0');
+    expect(existsSync(join(directory, 'github-output'))).toBe(false);
   });
 
   it('fails when release notes contain only headings', () => {
@@ -130,5 +173,6 @@ describe('Release validation CLI', () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain('Release notes for version 0.1.0 in CHANGELOG.md are empty.');
+    expect(existsSync(join(directory, 'github-output'))).toBe(false);
   });
 });

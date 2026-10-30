@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { appendFileSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -44,7 +44,19 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1
     const changelog = readFileSync('CHANGELOG.md', 'utf8');
 
     validateRelease(version, tag, changelog);
+
+    const isPrerelease = version.split('+')[0].includes('-');
+    const npmTag = isPrerelease ? 'next' : 'latest';
+
+    if (process.env.GITHUB_OUTPUT) {
+      appendFileSync(
+        process.env.GITHUB_OUTPUT,
+        `npm_tag=${npmTag}\nis_prerelease=${isPrerelease}\n`,
+      );
+    }
+
     console.log(`Validated release metadata for ${tag}.`);
+    console.log(`Publication channel: ${npmTag}.`);
   } catch (error) {
     console.error(error.message);
     process.exitCode = 1;
