@@ -714,7 +714,7 @@ import type { MyType } from './types';
 | `solid/components-return-once` | error    | Components must have a single return                   |
 | `solid/no-array-handlers`      | error    | Array handlers break fine-grained reactivity           |
 | `solid/event-handlers`         | error    | Event handler naming conventions                       |
-| `solid/no-proxy-apis`          | error    | Proxy APIs not compatible with Solid's reactive model  |
+| `solid/no-proxy-apis`          | off      | Allow standard store APIs such as `createStore`        |
 | `solid/no-innerhtml`           | warn     | Prefer JSX over `innerHTML`                            |
 | `solid/jsx-no-duplicate-props` | error    | Duplicate JSX props are forbidden                      |
 | `solid/no-unknown-namespaces`  | error    | Only known Solid JSX namespaces allowed                |

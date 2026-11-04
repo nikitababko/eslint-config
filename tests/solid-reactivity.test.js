@@ -38,6 +38,14 @@ export function createCounter() {
   return { count, setCount, doubled };
 }
 `;
+const validStoreCode = `
+import { createStore } from 'solid-js/store';
+export function createCounter() {
+  const [state, setState] = createStore({ count: 0 });
+  const doubled = () => state.count * 2;
+  return { state, setState, doubled };
+}
+`;
 
 function createESLint(config) {
   return new ESLint({ overrideConfigFile: true, overrideConfig: config });
@@ -69,6 +77,21 @@ describe.each(factories)('%s reactivity coverage', (_name, createConfig) => {
         }),
       ]);
       expect(valid.messages).toEqual([]);
+    });
+
+    it.each(fixtureFiles)('allows createStore in %s', async (file) => {
+      const eslint = createESLint(
+        createConfig({
+          isTypeAware,
+          tsconfigPath: './tsconfig.json',
+          tsconfigRootDir: fixturesDir,
+        }),
+      );
+      const [result] = await eslint.lintText(validStoreCode, {
+        filePath: path.join(fixturesDir, file),
+      });
+
+      expect(result.messages).toEqual([]);
     });
   });
 

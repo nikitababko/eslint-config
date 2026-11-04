@@ -39,7 +39,7 @@ export const solidLayer = (options = {}) => {
         'solid/no-innerhtml': RULE_STATUSES.WARN,
         'solid/jsx-no-duplicate-props': RULE_STATUSES.ERROR,
         'solid/no-unknown-namespaces': RULE_STATUSES.ERROR,
-        'solid/no-proxy-apis': RULE_STATUSES.ERROR,
+        'solid/no-proxy-apis': RULE_STATUSES.OFF,
         'solid/prefer-for': RULE_STATUSES.OFF,
       },
     },
