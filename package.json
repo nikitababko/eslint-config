@@ -1,6 +1,23 @@
 {
   "name": "@nikitababko/eslint-config",
   "version": "0.1.0",
+  "keywords": [
+    "eslint",
+    "eslintconfig",
+    "flat-config",
+    "typescript",
+    "react",
+    "solid"
+  ],
+  "author": "Nikita Babko <niki.babko@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikitababko/eslint-config.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nikitababko/eslint-config/issues"
+  },
   "type": "module",
   "types": "./configs/index.d.ts",
   "exports": {
@@ -43,51 +60,32 @@
     "README.md",
     "CHANGELOG.md"
   ],
-  "keywords": [
-    "eslint",
-    "eslintconfig",
-    "flat-config",
-    "typescript",
-    "react",
-    "solid"
-  ],
   "engines": {
     "node": "^20.19.0 || ^22.13.0 || >=24.0.0"
   },
-  "author": "Nikita Babko <niki.babko@gmail.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nikitababko/eslint-config.git"
+  "scripts": {
+    "commit": "cz",
+    "examples:build": "pnpm -r --filter \"example-*\" build",
+    "examples:lint": "pnpm -r --filter \"example-*\" lint",
+    "lint": "eslint .",
+    "lint:check": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "release:check": "node scripts/validate-release.js",
+    "typecheck": "pnpm exec tsc -p tsconfig.typecheck.json",
+    "test": "pnpm test:unit && pnpm examples:build",
+    "test:minimum": "node scripts/test-minimum-versions.js",
+    "test:readme": "node scripts/test-readme-install.js",
+    "test:unit": "vitest run",
+    "test:watch": "vitest"
   },
-  "bugs": {
-    "url": "https://github.com/nikitababko/eslint-config/issues"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^20.5.3",
-    "@commitlint/config-conventional": "^20.5.3",
-    "@eslint/js": "^9.39.5",
-    "@stylistic/eslint-plugin": "^5.10.0",
-    "@types/node": "^25.9.9",
-    "@typescript-eslint/eslint-plugin": "^8.72.0",
-    "@typescript-eslint/parser": "^8.72.0",
-    "commitizen": "^4.3.2",
-    "cz-customizable": "^7.5.4",
-    "eslint": "^9.39.5",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import-x": "^4.17.1",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.7",
-    "eslint-plugin-solid": "^0.14.5",
-    "eslint-plugin-unicorn": "^63.0.0",
-    "globals": "^17.13.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.4.0",
-    "prettier": "^3.9.10",
-    "typescript": "^5.9.3",
-    "vitest": "^4.1.12",
-    "yaml": "^2.9.1"
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": "commitizen.config.cjs"
+    }
   },
   "peerDependencies": {
     "@eslint/js": "^9.38.0",
@@ -118,28 +116,30 @@
       "optional": true
     }
   },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-customizable"
-    },
-    "cz-customizable": {
-      "config": "commitizen.config.cjs"
-    }
-  },
-  "scripts": {
-    "commit": "cz",
-    "examples:build": "pnpm -r --filter \"example-*\" build",
-    "examples:lint": "pnpm -r --filter \"example-*\" lint",
-    "lint": "eslint .",
-    "lint:check": "eslint . --max-warnings 0",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "release:check": "node scripts/validate-release.js",
-    "typecheck": "pnpm exec tsc -p tsconfig.typecheck.json",
-    "test": "pnpm test:unit && pnpm examples:build",
-    "test:minimum": "node scripts/test-minimum-versions.js",
-    "test:readme": "node scripts/test-readme-install.js",
-    "test:unit": "vitest run",
-    "test:watch": "vitest"
+  "devDependencies": {
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
+    "@eslint/js": "^9.39.5",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/node": "^25.9.9",
+    "@typescript-eslint/eslint-plugin": "^8.72.0",
+    "@typescript-eslint/parser": "^8.72.0",
+    "commitizen": "^4.3.2",
+    "cz-customizable": "^7.5.4",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import-x": "^4.17.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "eslint-plugin-solid": "^0.14.5",
+    "eslint-plugin-unicorn": "^63.0.0",
+    "globals": "^17.13.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.9.10",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.12",
+    "yaml": "^2.9.1"
   }
 }
