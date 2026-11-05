@@ -986,6 +986,11 @@ Contributions, bug reports, and feature requests are welcome.
 6. Commit using [Conventional Commits](https://www.conventionalcommits.org): `pnpm commit`
 7. Open a Pull Request
 
+Vitest sets `TSESTREE_SINGLE_RUN=false` because tests call `ESLint.lintText` with
+different source text for the same fixture paths. This keeps TypeScript programs
+up to date locally and in CI. To verify with the CI environment flag locally,
+run `CI=true pnpm test`.
+
 Please open an issue first for significant changes to discuss the approach.
 
 [Open an issue →](https://github.com/nikitababko/eslint-config/issues)
