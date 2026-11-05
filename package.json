@@ -54,6 +54,7 @@
   "engines": {
     "node": "^20.19.0 || ^22.13.0 || >=24.0.0"
   },
+  "author": "Nikita Babko <niki.babko@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
