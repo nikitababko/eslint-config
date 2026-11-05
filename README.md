@@ -990,6 +990,9 @@ Please open an issue first for significant changes to discuss the approach.
 
 [Open an issue →](https://github.com/nikitababko/eslint-config/issues)
 
+Group changelog entries under `Features`, `Fixes`, `Performance`, or `Maintenance`,
+and omit empty categories.
+
 Keep changes under `Unreleased` until preparing a release. Before creating the
 release tag, move them to a section with the package version and actual release
 date, and add a fresh `Unreleased` section above it.

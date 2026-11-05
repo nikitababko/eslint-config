@@ -2,16 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
-and this project follows [Semantic Versioning](https://semver.org/).
+This project follows [Semantic Versioning](https://semver.org/).
 
 ---
 
 ## [Unreleased](https://github.com/nikitababko/eslint-config/compare/v0.1.0...HEAD)
 
-## [0.1.0](https://github.com/nikitababko/eslint-config/releases/tag/v0.1.0) - 2026-10-25
+## [0.1.0](https://github.com/nikitababko/eslint-config/releases/tag/v0.1.0) - 2026-11-05
 
-### Added
+### Features
 
 - Flat ESLint presets:
   - `base` – ESLint recommended rules + Prettier compatibility.
@@ -20,7 +19,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
   - `react` – `vanilla` + React / Hooks / Refresh rules.
   - `solid` – `vanilla` + SolidJS rules.
 - Shared rule set (`commonTsRules`) used across presets.
-- Exports map entrypoints for presets (e.g. `@pkg/react`, `@pkg/solid`).
+- Exports map entrypoints for presets (e.g. `@nikitababko/eslint-config/react`,
+  `@nikitababko/eslint-config/solid`).
 - Optional `strict` layer for TypeScript, vanilla, React, and Solid presets.
   Reject unsafe operations involving `any`, require exhaustive union and enum
   switches, and treat explicit `any` and floating promises as errors. Scope the
@@ -51,6 +51,9 @@ and this project follows [Semantic Versioning](https://semver.org/).
   minimum Node.js version in CI.
 - Installation commands with compatible peer dependency ranges for npm, pnpm,
   and Yarn, verified in isolated Vanilla, React, and Solid consumers in CI.
+
+### Maintenance
+
 - Release workflow for npm and GitHub Packages with CI checks, example lint,
   minimum supported version checks, tag/version matching, and non-empty release
   notes required before publishing. Stable versions use the `latest` channel;
