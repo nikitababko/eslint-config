@@ -1002,7 +1002,9 @@ comes from `GITHUB_REF_NAME`. A missing version or section fails the command.
 
 CI runs on branch pushes and pull requests. It checks tests, example builds and
 lint, root lint, types, formatting, minimum supported dependency versions, and
-fresh installation using the README commands.
+fresh installation using the README commands. Unit tests also check that these
+release instructions agree with the workflow's registry secrets, validation
+commands, publication order, channels, and release artifacts.
 Tag pushes matching `v*` rerun this CI before publishing to either registry.
 They also run `node scripts/validate-release.js`, which requires the tag to equal
 `v<package.json version>` and a non-empty release section in `CHANGELOG.md`.
@@ -1015,13 +1017,19 @@ GitHub Packages: stable versions use `latest`; prereleases such as
 prerelease and is not set as the latest release for these versions. Build metadata
 alone, such as `0.2.0+build-2`, does not make a version a prerelease.
 
-Before pushing a release tag, configure the `AUTH_TOKEN_NPM` repository secret in
-GitHub Actions. Use a valid npm granular access token with read and write access
+Before pushing a release tag, configure these repository secrets in GitHub Actions:
+
+| Registry        | Registry URL                  | Repository secret   |
+| --------------- | ----------------------------- | ------------------- |
+| npm             | `https://registry.npmjs.org/` | `AUTH_TOKEN_NPM`    |
+| GitHub Packages | `https://npm.pkg.github.com/` | `AUTH_TOKEN_GITHUB` |
+
+For npm, use a valid granular access token with read and write access
 to publish `@nikitababko/eslint-config` and bypass 2FA enabled. Package settings
 must allow token-based publishing. See the
 [npm CI/CD documentation](https://docs.npmjs.com/using-private-packages-in-a-ci-cd-workflow/).
-GitHub Packages uses the `AUTH_TOKEN_GITHUB` repository secret containing a GitHub
-personal access token (classic) with `write:packages` permission.
+For GitHub Packages, use a GitHub personal access token (classic) with
+`write:packages` permission.
 The GitHub Release is created with the automatically provided `GITHUB_TOKEN`;
 its job has `contents: write` permission.
 
