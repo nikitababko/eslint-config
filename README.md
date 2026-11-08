@@ -1054,6 +1054,18 @@ git push origin v0.1.0
 The release workflow publishes to npm first, then GitHub Packages, and finally
 creates a GitHub Release with the changelog notes and npm tarball attached.
 
+To publish an existing release tag independently to GitHub Packages, use the
+manual **Publish to GitHub Packages** workflow (`publish-github.yml`). After the
+workflow is committed and pushed to `master`, open GitHub **Actions**, select
+**Publish to GitHub Packages**, and click **Run workflow**. Keep the workflow
+branch set to `master` and enter the release tag, for example `v0.1.0`, in `tag`.
+
+This workflow runs the shared CI against the selected tag, validates its package
+version and changelog, and publishes to GitHub Packages using `AUTH_TOKEN_GITHUB`
+and the validated `latest` or `next` channel. Publication to npm is independent
+of this workflow. It does not create a GitHub Release. The existing release tag
+can be used without recreating it.
+
 For a prerelease, set the package version to, for example, `0.2.0-beta.1`, add its
 dated release section to `CHANGELOG.md`, and commit the preparation. Then use
 `v0.2.0-beta.1` in the same validation, tagging, and push commands above.

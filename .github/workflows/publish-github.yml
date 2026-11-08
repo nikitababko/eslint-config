@@ -1,0 +1,61 @@
+name: Publish to GitHub Packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag (for example, v0.1.0)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    uses: ./.github/workflows/ci.yml
+    with:
+      ref: refs/tags/${{ inputs.tag }}
+
+  validate-release:
+    name: Validate release metadata
+    runs-on: ubuntu-latest
+    outputs:
+      npm_tag: ${{ steps.metadata.outputs.npm_tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ inputs.tag }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - id: metadata
+        run: node scripts/validate-release.js "$RELEASE_TAG"
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+
+  publish:
+    name: Publish to GitHub Packages
+    needs: [checks, validate-release]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ inputs.tag }}
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 10.20.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://npm.pkg.github.com/
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: npm publish --tag "$NPM_TAG"
+        env:
+          NPM_TAG: ${{ needs.validate-release.outputs.npm_tag }}
+          NODE_AUTH_TOKEN: ${{ secrets.AUTH_TOKEN_GITHUB }}
